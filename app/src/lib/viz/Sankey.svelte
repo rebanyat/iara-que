@@ -21,7 +21,9 @@
 		pctEmployed?: number;
 		pctAdequate?: number;
 		medianMonthsToJob?: number;
+		composite?: number;
 		genderRatio?: { F: number; M: number };
+		wave?: number;
 	};
 
 	type RawEdge = {
@@ -39,6 +41,7 @@
 		nodes: RawNode[];
 		edges: RawEdge[];
 		seed_totals: Record<string, number>;
+		stats?: { node_count: number; edge_count: number; placeholder_edges: number };
 	};
 
 	let svgEl = $state<SVGSVGElement | null>(null);
@@ -58,14 +61,21 @@
 	const pctFormat = d3.format('.0%');
 	const salaryFormat = (n: number) => integerFormat(Math.round(n)) + ' €';
 
-	function colorEdge(d: { source: { category?: string }; target: RawNode & { outcome_score?: number } }): string {
-		const scale = d3
-			.scaleLinear<string>()
-			.domain([0, 0.3, 0.6, 0.9])
-			.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
-			.clamp(true);
+	const compositeScale = d3
+		.scaleLinear<string>()
+		.domain([0, 0.35, 0.6, 0.85])
+		.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
+		.clamp(true);
+
+	function colorEdge(d: {
+		source: { category?: string };
+		target: RawNode & { outcome_score?: number };
+		meta?: RawEdgeMeta;
+	}): string {
+		const composite = d.meta?.composite;
+		if (typeof composite === 'number') return compositeScale(composite);
 		const score = d.target?.outcome_score;
-		if (typeof score === 'number') return scale(score);
+		if (typeof score === 'number') return compositeScale(score);
 		const cat = d.target?.category;
 		if (cat && CATEGORY_COLOR[cat as RawNode['category']]) return CATEGORY_COLOR[cat as RawNode['category']];
 		return '#7B8395';
@@ -143,13 +153,18 @@
 				bits.push(`<strong>${dd.source.label}</strong> → <strong>${dd.target.label}</strong>`);
 				bits.push(`Volum: <span class="num">${integerFormat(dd.value)}</span>`);
 				if (dd.meta.pctOfSource !== undefined) bits.push(`% origen: ${pctFormat(dd.meta.pctOfSource)}`);
-				if (dd.meta.medianSalary !== undefined) bits.push(`Salari medià: ${salaryFormat(dd.meta.medianSalary)}`);
 				if (dd.meta.pctEmployed !== undefined) bits.push(`Ocupats: ${pctFormat(dd.meta.pctEmployed)}`);
-				if (dd.meta.pctAdequate !== undefined) bits.push(`Adequació: ${pctFormat(dd.meta.pctAdequate)}`);
-				if (dd.meta.medianMonthsToJob !== undefined) bits.push(`Mesos a feina: ${dd.meta.medianMonthsToJob}`);
+				if (dd.meta.pctAdequate !== undefined) bits.push(`Adequació al títol: ${pctFormat(dd.meta.pctAdequate)}`);
+				if (dd.meta.medianSalary !== undefined) bits.push(`Salari modal: ${salaryFormat(dd.meta.medianSalary)}`);
+				if (dd.meta.medianMonthsToJob !== undefined) bits.push(`Mesos fins primera feina: ${dd.meta.medianMonthsToJob}`);
 				if (dd.meta.genderRatio)
 					bits.push(`Gènere: F ${pctFormat(dd.meta.genderRatio.F)} · M ${pctFormat(dd.meta.genderRatio.M)}`);
-				if (dd.meta.sourceDataset) bits.push(`<em class="src">font: ${dd.meta.sourceDataset}${dd.meta.placeholder ? ' (placeholder)' : ''}</em>`);
+				if (dd.meta.composite !== undefined)
+					bits.push(`Empleabilitat composta: <span class="num">${dd.meta.composite.toFixed(2)}</span>`);
+				const waveBit = dd.meta.wave ? ` · onada ${dd.meta.wave}` : '';
+				const provenance = dd.meta.placeholder ? ' (estimació)' : '';
+				if (dd.meta.sourceDataset)
+					bits.push(`<em class="src">font: ${dd.meta.sourceDataset}${waveBit}${provenance}</em>`);
 				const rect = containerEl?.getBoundingClientRect();
 				tooltip = {
 					x: event.clientX - (rect?.left ?? 0) + 14,
@@ -252,11 +267,19 @@
 	{/if}
 
 	{#if payload}
-		<div class="legend" aria-hidden="true">
-			<span class="dot" style="background: {CATEGORY_COLOR.origin}"></span> origen
-			<span class="dot" style="background: {CATEGORY_COLOR.study}"></span> formació
-			<span class="dot" style="background: {CATEGORY_COLOR.occupation}"></span> ocupació
-			<span class="dot" style="background: {CATEGORY_COLOR.outcome}"></span> outcome
+		<div class="legend-row">
+			<div class="legend" aria-hidden="true">
+				<span class="dot" style="background: {CATEGORY_COLOR.origin}"></span> origen
+				<span class="dot" style="background: {CATEGORY_COLOR.study}"></span> formació
+				<span class="dot" style="background: {CATEGORY_COLOR.occupation}"></span> ocupació
+				<span class="dot" style="background: {CATEGORY_COLOR.outcome}"></span> outcome
+			</div>
+			<div class="legend-scale" aria-label="Escala d'empleabilitat composta de l'aresta">
+				<span class="scale-label">empleabilitat composta</span>
+				<span class="scale-track"></span>
+				<span class="scale-min">baixa</span>
+				<span class="scale-max">alta</span>
+			</div>
 		</div>
 	{/if}
 </div>
@@ -320,11 +343,19 @@
 		font-size: var(--fs-micro);
 	}
 
+	.legend-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--sp-4);
+		margin-top: var(--sp-4);
+	}
+
 	.legend {
 		display: flex;
 		gap: var(--sp-4);
 		flex-wrap: wrap;
-		margin-top: var(--sp-3);
 		font-size: var(--fs-small);
 		color: var(--ink-secondary);
 		font-family: var(--font-mono);
@@ -338,4 +369,38 @@
 		margin-right: 6px;
 		vertical-align: -1px;
 	}
+
+	.legend-scale {
+		display: grid;
+		grid-template-columns: auto 200px auto;
+		grid-template-rows: auto 1fr;
+		column-gap: var(--sp-2);
+		row-gap: 2px;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: var(--fs-micro);
+		color: var(--ink-muted);
+	}
+
+	.scale-label {
+		grid-column: 1 / 4;
+		text-align: right;
+	}
+
+	.scale-track {
+		grid-column: 2;
+		grid-row: 2;
+		height: 8px;
+		border-radius: var(--radius-pill);
+		background: linear-gradient(
+			90deg,
+			#3b1f2b 0%,
+			#b53a4c 35%,
+			#e07c42 60%,
+			#f2c25d 100%
+		);
+	}
+
+	.scale-min { grid-column: 1; grid-row: 2; }
+	.scale-max { grid-column: 3; grid-row: 2; }
 </style>

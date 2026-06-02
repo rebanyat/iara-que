@@ -23,9 +23,11 @@
 <section class="viz container">
 	<Sankey />
 	<p class="caption">
-		Versió inicial — proporcions parcialment estimades fins a la integració completa de les
-		fonts AQU. Les arestes marcades com a <em>placeholder</em> es substituiran a mesura que es
-		processin els informes públics.
+		Volums alimentats per <strong>Idescat</strong> i <strong>MEFP</strong>; salari,
+		empleabilitat i adequació, per <strong>AQU</strong> (informes 2023) i
+		<strong>Consell de Cambres</strong> (2022). Passa el cursor per qualsevol aresta per
+		veure'n la mètrica i la font. La intensitat del color indica l'empleabilitat composta
+		del camí; el gruix, el volum agregat.
 	</p>
 </section>
 
@@ -86,8 +88,8 @@
 		line-height: var(--lh-loose);
 	}
 
-	.caption em {
-		font-style: italic;
+	.caption strong {
 		color: var(--ink-secondary);
+		font-weight: 600;
 	}
 </style>
