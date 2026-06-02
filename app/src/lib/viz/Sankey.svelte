@@ -47,7 +47,8 @@
 	let svgEl = $state<SVGSVGElement | null>(null);
 	let containerEl = $state<HTMLDivElement | null>(null);
 	let tooltip = $state<{ x: number; y: number; html: string } | null>(null);
-	let status = $state<'loading' | 'ready' | 'error'>('loading');
+	let status = $state<'loading' | 'ready' | 'fetch-error' | 'render-error'>('loading');
+	let errorMessage = $state<string>('');
 	let payload = $state<Payload | null>(null);
 
 	const CATEGORY_COLOR: Record<RawNode['category'], string> = {
@@ -86,24 +87,22 @@
 		const svg = d3.select(svgEl);
 		svg.selectAll('*').remove();
 
-		const idToIdx = new Map(p.nodes.map((n, i) => [n.id, i]));
-		const graph = {
-			nodes: p.nodes.map((n) => ({ ...n })),
-			links: p.edges
-				.map((e) => {
-					const s = idToIdx.get(e.source);
-					const t = idToIdx.get(e.target);
-					if (s === undefined || t === undefined) return null;
-					return { source: s, target: t, value: e.value, meta: e.meta };
-				})
-				.filter((e): e is { source: number; target: number; value: number; meta: RawEdgeMeta } => e !== null)
-		};
+		// Filter out any edge whose endpoints aren't in the node catalog.
+		// d3-sankey would otherwise throw "missing: <id>".
+		const ids = new Set(p.nodes.map((n) => n.id));
+		const safeNodes = p.nodes.map((n) => ({ ...n }));
+		const safeLinks = p.edges
+			.filter((e) => ids.has(e.source) && ids.has(e.target))
+			.map((e) => ({ source: e.source, target: e.target, value: e.value, meta: e.meta }));
 
 		const margin = { top: 20, right: 240, bottom: 20, left: 20 };
 		const innerW = Math.max(640, width - margin.left - margin.right);
 		const innerH = Math.max(420, height - margin.top - margin.bottom);
 
-		const layout = d3Sankey<{ id: string; label: string; category: string; layer: number }, { value: number; meta: RawEdgeMeta }>()
+		const layout = d3Sankey<
+			{ id: string; label: string; category: string; layer: number },
+			{ value: number; meta: RawEdgeMeta }
+		>()
 			.nodeId((d) => (d as unknown as { id: string }).id)
 			.nodeAlign(sankeyLeft)
 			.nodeWidth(14)
@@ -113,11 +112,14 @@
 				[innerW, innerH]
 			]);
 
-		// d3-sankey mutates the input; cast through unknown to satisfy the generics
-		const result = layout({
-			nodes: graph.nodes.map((n) => ({ ...n })) as never,
-			links: graph.links.map((l) => ({ ...l })) as never
-		});
+		let result;
+		try {
+			// d3-sankey mutates the input; pass string ids as source/target
+			result = layout({ nodes: safeNodes as never, links: safeLinks as never });
+		} catch (err) {
+			console.error('d3-sankey layout failed:', err);
+			throw err;
+		}
 
 		svg
 			.attr('viewBox', `0 0 ${innerW + margin.left + margin.right} ${innerH + margin.top + margin.bottom}`)
@@ -224,7 +226,13 @@
 		if (!containerEl || !payload) return;
 		const w = containerEl.clientWidth;
 		const h = Math.max(520, Math.min(820, window.innerHeight * 0.72));
-		render(payload, w, h);
+		try {
+			render(payload, w, h);
+		} catch (e) {
+			console.error('Sankey render failed:', e);
+			status = 'render-error';
+			errorMessage = e instanceof Error ? e.message : String(e);
+		}
 	}
 
 	onMount(() => {
@@ -233,15 +241,19 @@
 				const res = await fetch('/data/sankey.json');
 				if (!res.ok) throw new Error(`HTTP ${res.status}`);
 				payload = (await res.json()) as Payload;
-				status = 'ready';
-				measureAndRender();
 			} catch (e) {
 				console.error('Failed to load sankey.json:', e);
-				status = 'error';
+				status = 'fetch-error';
+				errorMessage = e instanceof Error ? e.message : String(e);
+				return;
 			}
+			status = 'ready';
+			measureAndRender();
 		})();
 
-		const onResize = () => measureAndRender();
+		const onResize = () => {
+			if (status === 'ready') measureAndRender();
+		};
 		window.addEventListener('resize', onResize);
 		return () => window.removeEventListener('resize', onResize);
 	});
@@ -250,8 +262,16 @@
 <div class="sankey-wrap" bind:this={containerEl}>
 	{#if status === 'loading'}
 		<p class="state-msg">Carregant l'atles…</p>
-	{:else if status === 'error'}
-		<p class="state-msg state-err">No s'han pogut carregar les dades del sankey.</p>
+	{:else if status === 'fetch-error'}
+		<p class="state-msg state-err">
+			No s'han pogut carregar les dades del sankey.<br />
+			<span class="state-detail">{errorMessage}</span>
+		</p>
+	{:else if status === 'render-error'}
+		<p class="state-msg state-err">
+			Error de renderització del sankey.<br />
+			<span class="state-detail">{errorMessage}</span>
+		</p>
 	{/if}
 
 	<svg
@@ -313,6 +333,16 @@
 
 	.state-err {
 		color: var(--accent-warm);
+		text-align: center;
+		padding: var(--sp-4);
+	}
+
+	.state-detail {
+		display: inline-block;
+		margin-top: var(--sp-2);
+		font-family: var(--font-mono);
+		font-size: var(--fs-micro);
+		color: var(--ink-muted);
 	}
 
 	.tooltip {
