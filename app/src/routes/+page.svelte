@@ -2,6 +2,7 @@
 	import Sankey from '$lib/viz/Sankey.svelte';
 	import FilterChips from '$lib/ui/FilterChips.svelte';
 	import Legend from '$lib/ui/Legend.svelte';
+	import SearchBox from '$lib/ui/SearchBox.svelte';
 </script>
 
 <svelte:head>
@@ -23,6 +24,7 @@
 </section>
 
 <section class="viz container">
+	<SearchBox />
 	<FilterChips />
 	<Sankey />
 	<Legend />

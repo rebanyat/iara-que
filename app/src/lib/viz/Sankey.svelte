@@ -3,7 +3,14 @@
 	import { sankey as d3Sankey, sankeyLinkHorizontal, sankeyLeft } from 'd3-sankey';
 	import * as d3 from 'd3';
 	import { filters, type ColorMetric } from '$lib/stores/filters';
-	import { selection, togglePin, isSameEdge, type EdgeKey } from '$lib/stores/selection';
+	import {
+		selection,
+		togglePin,
+		isSameEdge,
+		isco1ToNodeId,
+		type EdgeKey,
+		type SearchTarget
+	} from '$lib/stores/selection';
 	import { computeActiveEdges, edgeKey } from '$lib/utils/path';
 
 	type RawNode = {
@@ -277,6 +284,16 @@
 		colorMetric: 'composite'
 	});
 	let currentPinned: EdgeKey | null = $state(null);
+	let currentSearchTarget: SearchTarget | null = $state(null);
+
+	function intersect(a: Set<string> | null, b: Set<string> | null): Set<string> | null {
+		if (a === null && b === null) return null;
+		if (a === null) return b;
+		if (b === null) return a;
+		const out = new Set<string>();
+		for (const v of a) if (b.has(v)) out.add(v);
+		return out;
+	}
 
 	function applyVisualState() {
 		if (!svgEl || !payload) return;
@@ -284,7 +301,11 @@
 		const links = svg.selectAll('.links path');
 		if (links.empty()) return;
 
-		const activeSet = computeActiveEdges(payload.edges, currentFilters.branca);
+		const brancaActive = computeActiveEdges(payload.edges, currentFilters.branca);
+		const searchActive = currentSearchTarget
+			? computeActiveEdges(payload.edges, [isco1ToNodeId(currentSearchTarget.isco1)])
+			: null;
+		const activeSet = intersect(brancaActive, searchActive);
 		const metric = currentFilters.colorMetric;
 
 		links
@@ -303,7 +324,9 @@
 					isSameEdge({ source: dd.source.id, target: dd.target.id }, currentPinned);
 				if (isPinned) return 0.95;
 				if (activeSet === null) return 0.5;
-				return activeSet.has(k) ? 0.7 : 0.08;
+				// Slightly stronger highlight when both filters are active
+				const isLayered = brancaActive !== null && searchActive !== null;
+				return activeSet.has(k) ? (isLayered ? 0.85 : 0.7) : 0.08;
 			});
 
 		// Node opacity follows whether any incoming/outgoing edge is active
@@ -365,6 +388,7 @@
 		});
 		const unsubSelection = selection.subscribe((s) => {
 			currentPinned = s.pinnedEdge;
+			currentSearchTarget = s.searchTarget;
 			applyVisualState();
 		});
 
