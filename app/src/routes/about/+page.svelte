@@ -79,10 +79,4 @@
 	}
 
 	p strong { color: var(--ink-primary); }
-
-	.hint {
-		margin-top: var(--sp-8);
-		color: var(--ink-muted);
-		font-size: var(--fs-small);
-	}
 </style>
