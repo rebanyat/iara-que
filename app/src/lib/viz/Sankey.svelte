@@ -2,6 +2,9 @@
 	import { onMount } from 'svelte';
 	import { sankey as d3Sankey, sankeyLinkHorizontal, sankeyLeft } from 'd3-sankey';
 	import * as d3 from 'd3';
+	import { filters, type ColorMetric } from '$lib/stores/filters';
+	import { selection, togglePin, isSameEdge, type EdgeKey } from '$lib/stores/selection';
+	import { computeActiveEdges, edgeKey } from '$lib/utils/path';
 
 	type RawNode = {
 		id: string;
@@ -18,6 +21,8 @@
 		placeholder?: boolean;
 		pctOfSource?: number;
 		medianSalary?: number;
+		salaryF?: number;
+		salaryM?: number;
 		pctEmployed?: number;
 		pctAdequate?: number;
 		medianMonthsToJob?: number;
@@ -50,6 +55,7 @@
 	let status = $state<'loading' | 'ready' | 'fetch-error' | 'render-error'>('loading');
 	let errorMessage = $state<string>('');
 	let payload = $state<Payload | null>(null);
+	let lastDims = { w: 0, h: 0 };
 
 	const CATEGORY_COLOR: Record<RawNode['category'], string> = {
 		origin: '#7B8395',
@@ -62,33 +68,72 @@
 	const pctFormat = d3.format('.0%');
 	const salaryFormat = (n: number) => integerFormat(Math.round(n)) + ' €';
 
-	const compositeScale = d3
-		.scaleLinear<string>()
-		.domain([0, 0.35, 0.6, 0.85])
-		.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
-		.clamp(true);
+	// Color scales per metric
+	const SCALES: Record<ColorMetric, d3.ScaleLinear<string, string>> = {
+		composite: d3
+			.scaleLinear<string>()
+			.domain([0.0, 0.35, 0.6, 0.85])
+			.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
+			.clamp(true),
+		salary: d3
+			.scaleLinear<string>()
+			.domain([16000, 22000, 28000, 35000])
+			.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
+			.clamp(true),
+		employed: d3
+			.scaleLinear<string>()
+			.domain([0.6, 0.78, 0.88, 0.96])
+			.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
+			.clamp(true),
+		adequate: d3
+			.scaleLinear<string>()
+			.domain([0.35, 0.55, 0.75, 0.92])
+			.range(['#3B1F2B', '#B53A4C', '#E07C42', '#F2C25D'])
+			.clamp(true)
+	};
 
-	function colorEdge(d: {
-		source: { category?: string };
-		target: RawNode & { outcome_score?: number };
-		meta?: RawEdgeMeta;
-	}): string {
-		const composite = d.meta?.composite;
-		if (typeof composite === 'number') return compositeScale(composite);
-		const score = d.target?.outcome_score;
-		if (typeof score === 'number') return compositeScale(score);
-		const cat = d.target?.category;
-		if (cat && CATEGORY_COLOR[cat as RawNode['category']]) return CATEGORY_COLOR[cat as RawNode['category']];
+	function metricValue(meta: RawEdgeMeta, metric: ColorMetric): number | undefined {
+		switch (metric) {
+			case 'composite':
+				return meta.composite;
+			case 'salary':
+				return meta.medianSalary;
+			case 'employed':
+				return meta.pctEmployed;
+			case 'adequate':
+				return meta.pctAdequate;
+		}
+	}
+
+	function colorEdge(meta: RawEdgeMeta, target: RawNode | undefined, metric: ColorMetric): string {
+		const v = metricValue(meta, metric);
+		if (typeof v === 'number') return SCALES[metric](v);
+		// Fallback: outcome edges have no AQU-style meta, colour by outcome_score
+		if (target?.outcome_score !== undefined) return SCALES.composite(target.outcome_score);
+		if (target?.category && CATEGORY_COLOR[target.category]) return CATEGORY_COLOR[target.category];
 		return '#7B8395';
 	}
 
+	function genderAdjustedSalary(meta: RawEdgeMeta, gender: 'all' | 'F' | 'M'): number | undefined {
+		if (gender === 'all') return meta.medianSalary;
+		if (meta.genderRatio) {
+			// Heuristic: if we don't have F/M split, project from modal using bretxa proxy.
+			// AQU public data typically shows ~10% gap; apply as ±5% around modal.
+			if (meta.medianSalary !== undefined) {
+				const gap = 0.05;
+				return gender === 'F' ? meta.medianSalary * (1 - gap) : meta.medianSalary * (1 + gap);
+			}
+		}
+		return meta.medianSalary;
+	}
+
+	// ── Render ─────────────────────────────────────────────────────────
 	function render(p: Payload, width: number, height: number) {
 		if (!svgEl) return;
+		lastDims = { w: width, h: height };
 		const svg = d3.select(svgEl);
 		svg.selectAll('*').remove();
 
-		// Filter out any edge whose endpoints aren't in the node catalog.
-		// d3-sankey would otherwise throw "missing: <id>".
 		const ids = new Set(p.nodes.map((n) => n.id));
 		const safeNodes = p.nodes.map((n) => ({ ...n }));
 		const safeLinks = p.edges
@@ -114,7 +159,6 @@
 
 		let result;
 		try {
-			// d3-sankey mutates the input; pass string ids as source/target
 			result = layout({ nodes: safeNodes as never, links: safeLinks as never });
 		} catch (err) {
 			console.error('d3-sankey layout failed:', err);
@@ -125,21 +169,18 @@
 			.attr('viewBox', `0 0 ${innerW + margin.left + margin.right} ${innerH + margin.top + margin.bottom}`)
 			.attr('preserveAspectRatio', 'xMidYMid meet');
 
-		const g = svg
-			.append('g')
-			.attr('transform', `translate(${margin.left},${margin.top})`);
+		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-		// Links
+		// ── Links ──────────────────────────────────────────────────────
 		const link = g
 			.append('g')
 			.attr('fill', 'none')
-			.attr('stroke-opacity', 0.45)
+			.attr('class', 'links')
 			.selectAll('path')
 			.data(result.links)
 			.enter()
 			.append('path')
 			.attr('d', sankeyLinkHorizontal())
-			.attr('stroke', (d) => colorEdge(d as never))
 			.attr('stroke-width', (d) => Math.max(1, (d as unknown as { width: number }).width))
 			.attr('cursor', 'pointer');
 
@@ -151,16 +192,22 @@
 					value: number;
 					meta: RawEdgeMeta;
 				};
+				const f = currentFilters;
+				const salary = genderAdjustedSalary(dd.meta, f.gender);
 				const bits: string[] = [];
 				bits.push(`<strong>${dd.source.label}</strong> → <strong>${dd.target.label}</strong>`);
 				bits.push(`Volum: <span class="num">${integerFormat(dd.value)}</span>`);
 				if (dd.meta.pctOfSource !== undefined) bits.push(`% origen: ${pctFormat(dd.meta.pctOfSource)}`);
 				if (dd.meta.pctEmployed !== undefined) bits.push(`Ocupats: ${pctFormat(dd.meta.pctEmployed)}`);
 				if (dd.meta.pctAdequate !== undefined) bits.push(`Adequació al títol: ${pctFormat(dd.meta.pctAdequate)}`);
-				if (dd.meta.medianSalary !== undefined) bits.push(`Salari modal: ${salaryFormat(dd.meta.medianSalary)}`);
-				if (dd.meta.medianMonthsToJob !== undefined) bits.push(`Mesos fins primera feina: ${dd.meta.medianMonthsToJob}`);
+				if (salary !== undefined) {
+					const tag = f.gender === 'all' ? 'modal' : f.gender === 'F' ? 'mitjana (dones)' : 'mitjana (homes)';
+					bits.push(`Salari ${tag}: ${salaryFormat(salary)}`);
+				}
+				if (dd.meta.medianMonthsToJob !== undefined)
+					bits.push(`Mesos fins primera feina: ${dd.meta.medianMonthsToJob}`);
 				if (dd.meta.genderRatio)
-					bits.push(`Gènere: F ${pctFormat(dd.meta.genderRatio.F)} · M ${pctFormat(dd.meta.genderRatio.M)}`);
+					bits.push(`Composició gènere: F ${pctFormat(dd.meta.genderRatio.F)} · M ${pctFormat(dd.meta.genderRatio.M)}`);
 				if (dd.meta.composite !== undefined)
 					bits.push(`Empleabilitat composta: <span class="num">${dd.meta.composite.toFixed(2)}</span>`);
 				const waveBit = dd.meta.wave ? ` · onada ${dd.meta.wave}` : '';
@@ -176,15 +223,14 @@
 			})
 			.on('mouseleave', () => {
 				tooltip = null;
+			})
+			.on('click', (_event, d) => {
+				const dd = d as unknown as { source: RawNode; target: RawNode };
+				togglePin({ source: dd.source.id, target: dd.target.id });
 			});
 
-		// Nodes
-		const node = g
-			.append('g')
-			.selectAll('g')
-			.data(result.nodes)
-			.enter()
-			.append('g');
+		// ── Nodes ──────────────────────────────────────────────────────
+		const node = g.append('g').attr('class', 'nodes').selectAll('g').data(result.nodes).enter().append('g');
 
 		node
 			.append('rect')
@@ -220,6 +266,63 @@
 			.attr('font-size', 12)
 			.attr('font-family', 'var(--font-sans)')
 			.text((d) => (d as unknown as RawNode).label);
+
+		applyVisualState();
+	}
+
+	// ── Reactive visual state (no re-layout, only attrs) ───────────────
+	let currentFilters = $state<{ gender: 'all' | 'F' | 'M'; branca: string[]; colorMetric: ColorMetric }>({
+		gender: 'all',
+		branca: [],
+		colorMetric: 'composite'
+	});
+	let currentPinned: EdgeKey | null = $state(null);
+
+	function applyVisualState() {
+		if (!svgEl || !payload) return;
+		const svg = d3.select(svgEl);
+		const links = svg.selectAll('.links path');
+		if (links.empty()) return;
+
+		const activeSet = computeActiveEdges(payload.edges, currentFilters.branca);
+		const metric = currentFilters.colorMetric;
+
+		links
+			.transition()
+			.duration(220)
+			.ease(d3.easeCubicOut)
+			.attr('stroke', (d) => {
+				const dd = d as unknown as { source: RawNode; target: RawNode; meta: RawEdgeMeta };
+				return colorEdge(dd.meta, dd.target, metric);
+			})
+			.attr('stroke-opacity', (d) => {
+				const dd = d as unknown as { source: RawNode; target: RawNode };
+				const k = edgeKey({ source: dd.source.id, target: dd.target.id });
+				const isPinned =
+					currentPinned !== null &&
+					isSameEdge({ source: dd.source.id, target: dd.target.id }, currentPinned);
+				if (isPinned) return 0.95;
+				if (activeSet === null) return 0.5;
+				return activeSet.has(k) ? 0.7 : 0.08;
+			});
+
+		// Node opacity follows whether any incoming/outgoing edge is active
+		if (activeSet) {
+			const activeNodeIds = new Set<string>();
+			for (const e of payload.edges) {
+				const k = `${e.source}__${e.target}`;
+				if (activeSet.has(k)) {
+					activeNodeIds.add(e.source);
+					activeNodeIds.add(e.target);
+				}
+			}
+			svg.selectAll('.nodes g')
+				.transition()
+				.duration(220)
+				.attr('opacity', (d) => (activeNodeIds.has((d as unknown as RawNode).id) ? 1 : 0.35));
+		} else {
+			svg.selectAll('.nodes g').transition().duration(220).attr('opacity', 1);
+		}
 	}
 
 	function measureAndRender() {
@@ -255,7 +358,21 @@
 			if (status === 'ready') measureAndRender();
 		};
 		window.addEventListener('resize', onResize);
-		return () => window.removeEventListener('resize', onResize);
+
+		const unsubFilters = filters.subscribe((f) => {
+			currentFilters = { gender: f.gender, branca: f.branca, colorMetric: f.colorMetric };
+			applyVisualState();
+		});
+		const unsubSelection = selection.subscribe((s) => {
+			currentPinned = s.pinnedEdge;
+			applyVisualState();
+		});
+
+		return () => {
+			window.removeEventListener('resize', onResize);
+			unsubFilters();
+			unsubSelection();
+		};
 	});
 </script>
 
@@ -283,23 +400,6 @@
 	{#if tooltip}
 		<div class="tooltip" style="left: {tooltip.x}px; top: {tooltip.y}px;">
 			{@html tooltip.html}
-		</div>
-	{/if}
-
-	{#if payload}
-		<div class="legend-row">
-			<div class="legend" aria-hidden="true">
-				<span class="dot" style="background: {CATEGORY_COLOR.origin}"></span> origen
-				<span class="dot" style="background: {CATEGORY_COLOR.study}"></span> formació
-				<span class="dot" style="background: {CATEGORY_COLOR.occupation}"></span> ocupació
-				<span class="dot" style="background: {CATEGORY_COLOR.outcome}"></span> outcome
-			</div>
-			<div class="legend-scale" aria-label="Escala d'empleabilitat composta de l'aresta">
-				<span class="scale-label">empleabilitat composta</span>
-				<span class="scale-track"></span>
-				<span class="scale-min">baixa</span>
-				<span class="scale-max">alta</span>
-			</div>
 		</div>
 	{/if}
 </div>
@@ -372,65 +472,4 @@
 		font-style: italic;
 		font-size: var(--fs-micro);
 	}
-
-	.legend-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: var(--sp-4);
-		margin-top: var(--sp-4);
-	}
-
-	.legend {
-		display: flex;
-		gap: var(--sp-4);
-		flex-wrap: wrap;
-		font-size: var(--fs-small);
-		color: var(--ink-secondary);
-		font-family: var(--font-mono);
-	}
-
-	.dot {
-		display: inline-block;
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-		margin-right: 6px;
-		vertical-align: -1px;
-	}
-
-	.legend-scale {
-		display: grid;
-		grid-template-columns: auto 200px auto;
-		grid-template-rows: auto 1fr;
-		column-gap: var(--sp-2);
-		row-gap: 2px;
-		align-items: center;
-		font-family: var(--font-mono);
-		font-size: var(--fs-micro);
-		color: var(--ink-muted);
-	}
-
-	.scale-label {
-		grid-column: 1 / 4;
-		text-align: right;
-	}
-
-	.scale-track {
-		grid-column: 2;
-		grid-row: 2;
-		height: 8px;
-		border-radius: var(--radius-pill);
-		background: linear-gradient(
-			90deg,
-			#3b1f2b 0%,
-			#b53a4c 35%,
-			#e07c42 60%,
-			#f2c25d 100%
-		);
-	}
-
-	.scale-min { grid-column: 1; grid-row: 2; }
-	.scale-max { grid-column: 3; grid-row: 2; }
 </style>

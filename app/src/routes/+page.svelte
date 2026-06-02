@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Sankey from '$lib/viz/Sankey.svelte';
+	import FilterChips from '$lib/ui/FilterChips.svelte';
+	import Legend from '$lib/ui/Legend.svelte';
 </script>
 
 <svelte:head>
@@ -21,13 +23,15 @@
 </section>
 
 <section class="viz container">
+	<FilterChips />
 	<Sankey />
+	<Legend />
 	<p class="caption">
 		Volums alimentats per <strong>Idescat</strong> i <strong>MEFP</strong>; salari,
 		empleabilitat i adequació, per <strong>AQU</strong> (informes 2023) i
 		<strong>Consell de Cambres</strong> (2022). Passa el cursor per qualsevol aresta per
-		veure'n la mètrica i la font. La intensitat del color indica l'empleabilitat composta
-		del camí; el gruix, el volum agregat.
+		veure'n la mètrica i la font; fes clic per fixar-la. La intensitat del color codifica
+		la mètrica seleccionada més amunt; el gruix, el volum agregat.
 	</p>
 </section>
 
