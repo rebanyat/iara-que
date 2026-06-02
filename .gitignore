@@ -1,0 +1,24 @@
+# Node
+node_modules/
+
+# Build output
+app/.svelte-kit/
+app/build/
+app/.vercel/
+app/.output/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.cache/
+*.parquet
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example

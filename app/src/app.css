@@ -1,0 +1,222 @@
+/* =====================================================================
+ * I ara, què? — design tokens
+ * Reference: /wiki/09_design_system.md
+ * ===================================================================== */
+
+:root {
+	/* Colors — dark canvas (default) */
+	--bg-base: #0f1115;
+	--bg-elev: #171a20;
+	--bg-surface: #1f232c;
+	--bg-overlay: rgba(15, 17, 21, 0.85);
+
+	--ink-primary: #f4f5f7;
+	--ink-secondary: #b9bfcb;
+	--ink-muted: #7b8395;
+	--ink-disabled: #4d535f;
+
+	--accent: #ffc857;
+	--accent-warm: #e0533d;
+	--accent-cool: #4fb6d0;
+
+	--gender-f: #c16ba1;
+	--gender-m: #5b8fb9;
+	--gender-nb: #8fb17a;
+
+	--edge-1: #3b1f2b;
+	--edge-2: #b53a4c;
+	--edge-3: #e07c42;
+	--edge-4: #f2c25d;
+	--edge-5: #f8efd2;
+
+	--border-subtle: rgba(244, 245, 247, 0.08);
+	--border-default: rgba(244, 245, 247, 0.16);
+	--border-strong: rgba(244, 245, 247, 0.32);
+
+	/* Typography */
+	--font-serif: 'Fraunces', 'Georgia', serif;
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+	--fs-display: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+	--fs-h1: clamp(2rem, 3vw + 1rem, 3rem);
+	--fs-h2: clamp(1.5rem, 2vw + 0.5rem, 2rem);
+	--fs-h3: 1.25rem;
+	--fs-body: 1rem;
+	--fs-small: 0.875rem;
+	--fs-micro: 0.75rem;
+
+	--lh-tight: 1.15;
+	--lh-default: 1.5;
+	--lh-loose: 1.65;
+
+	/* Spacing — 8px grid */
+	--sp-1: 4px;
+	--sp-2: 8px;
+	--sp-3: 12px;
+	--sp-4: 16px;
+	--sp-5: 24px;
+	--sp-6: 32px;
+	--sp-8: 48px;
+	--sp-10: 64px;
+	--sp-12: 96px;
+
+	/* Layout */
+	--container-max: 1440px;
+	--header-h: 64px;
+	--side-panel-w: 280px;
+	--inspector-w: 360px;
+
+	/* Radius + shadows */
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 16px;
+	--radius-pill: 999px;
+
+	--shadow-md: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 16px rgba(0, 0, 0, 0.18);
+	--shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.24), 0 24px 48px rgba(0, 0, 0, 0.32);
+
+	/* Motion */
+	--ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+	--dur-1: 120ms;
+	--dur-2: 180ms;
+	--dur-3: 260ms;
+	--dur-4: 420ms;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--bg-base: #f9f7f2;
+		--bg-elev: #ffffff;
+		--bg-surface: #f1ede3;
+		--bg-overlay: rgba(249, 247, 242, 0.92);
+
+		--ink-primary: #1b1e25;
+		--ink-secondary: #4a505c;
+		--ink-muted: #6b7280;
+		--ink-disabled: #b4b9c2;
+
+		--border-subtle: rgba(27, 30, 37, 0.08);
+		--border-default: rgba(27, 30, 37, 0.16);
+		--border-strong: rgba(27, 30, 37, 0.32);
+
+		--shadow-md: 0 1px 2px rgba(0, 0, 0, 0.04), 0 6px 16px rgba(0, 0, 0, 0.06);
+		--shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.06), 0 24px 48px rgba(0, 0, 0, 0.10);
+	}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--dur-1: 0ms;
+		--dur-2: 0ms;
+		--dur-3: 0ms;
+		--dur-4: 0ms;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Reset + base */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: var(--lh-default);
+	color: var(--ink-primary);
+	background: var(--bg-base);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	margin: 0;
+	min-height: 100dvh;
+	font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-serif);
+	font-weight: 700;
+	line-height: var(--lh-tight);
+	letter-spacing: -0.01em;
+	margin: 0;
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p { margin: 0; }
+
+a {
+	color: var(--accent-cool);
+	text-decoration: none;
+	border-bottom: 1px solid color-mix(in srgb, var(--accent-cool) 30%, transparent);
+	transition: color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
+}
+
+a:hover,
+a:focus-visible {
+	color: var(--accent);
+	border-bottom-color: var(--accent);
+}
+
+button {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
+
+/* Code / numbers in tables */
+.mono,
+code,
+kbd {
+	font-family: var(--font-mono);
+	font-feature-settings: 'tnum' 1;
+}
+
+/* Utility */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.container {
+	max-width: var(--container-max);
+	margin-inline: auto;
+	padding-inline: var(--sp-5);
+}
