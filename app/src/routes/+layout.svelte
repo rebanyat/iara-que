@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { hydrateFromUrl, startUrlSync } from '$lib/utils/urlSync';
 	import { startDatasets } from '$lib/stores/data';
+	import { initEaster } from '$lib/stores/easter';
 
 	let { children } = $props();
 
@@ -11,7 +12,11 @@
 		hydrateFromUrl();
 		startDatasets();
 		const stop = startUrlSync();
-		return () => stop();
+		const stopEaster = initEaster();
+		return () => {
+			stop();
+			stopEaster();
+		};
 	});
 
 	const nav = [

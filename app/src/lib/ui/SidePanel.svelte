@@ -3,6 +3,7 @@
 	import GenderDumbbell from '$lib/viz/GenderDumbbell.svelte';
 	import ComarcaMap from '$lib/viz/ComarcaMap.svelte';
 	import TimeSeries from '$lib/viz/TimeSeries.svelte';
+	import RealityCheck from '$lib/viz/RealityCheck.svelte';
 	import { activeSelection } from '$lib/stores/activeSelection';
 	import { clearSearchTarget } from '$lib/stores/selection';
 	import { resetFilters } from '$lib/stores/filters';
@@ -59,6 +60,10 @@
 
 		<section class="card">
 			<TimeSeries />
+		</section>
+
+		<section class="card card-wide reality-card">
+			<RealityCheck />
 		</section>
 	</div>
 </aside>
@@ -144,6 +149,19 @@
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
 		padding: var(--sp-5);
+	}
+
+	.card-wide {
+		grid-column: 1 / -1;
+	}
+
+	.reality-card {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--accent-warm) 6%, var(--bg-elev)) 0%,
+			var(--bg-elev) 100%
+		);
+		border-color: color-mix(in srgb, var(--accent-warm) 20%, var(--border-subtle));
 	}
 
 </style>

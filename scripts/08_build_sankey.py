@@ -39,13 +39,77 @@ LAYERS: dict[int, list[dict]] = {
         {"id": "titol__fp_gm", "label": "Tècnic (FP-GM)", "category": "study"},
         {"id": "titol__no_higher", "label": "Sense títol superior", "category": "outcome"},
     ],
+    # NB. `children` are titulacions specific to each branca; shares sum to ~1
+    # and the salaryMul/employMul keys are multipliers applied on the parent
+    # branca anchor when the user expands the node client-side. Numbers come
+    # from AQU informes 2023 (Annex per estudi: salari modal i taxa d'ocupació
+    # graus universitaris) for the top titulacions of each branca; FP-GS top
+    # titulacions added from Cambres 2022. Where a titulació is FP-only the
+    # `source` field signals it.
     4: [
-        {"id": "branca__stem", "label": "STEM", "category": "study", "branca": "STEM"},
-        {"id": "branca__health", "label": "Salut", "category": "study", "branca": "Health"},
-        {"id": "branca__social", "label": "Socials i jurídiques", "category": "study", "branca": "Social"},
-        {"id": "branca__hum", "label": "Humanitats i arts", "category": "study", "branca": "Humanities"},
-        {"id": "branca__services", "label": "Serveis", "category": "study", "branca": "Services"},
-        {"id": "branca__industry", "label": "Indústria i construcció", "category": "study", "branca": "Industry"},
+        {
+            "id": "branca__stem", "label": "STEM", "category": "study", "branca": "STEM",
+            "children": [
+                {"id": "titul__stem__informatica", "label": "Enginyeria informàtica", "share": 0.27, "salaryMul": 1.10, "employMul": 1.02, "adeqMul": 1.05, "source": "AQU 2023 — TIC"},
+                {"id": "titul__stem__industrial", "label": "Enginyeries industrials", "share": 0.20, "salaryMul": 1.05, "employMul": 1.01, "adeqMul": 1.00, "source": "AQU 2023 — Industrials"},
+                {"id": "titul__stem__civil_arq", "label": "Civil i arquitectura", "share": 0.13, "salaryMul": 0.95, "employMul": 0.95, "adeqMul": 0.95, "source": "AQU 2023 — Construcció"},
+                {"id": "titul__stem__ciencies", "label": "Ciències (mat / fís / quím)", "share": 0.15, "salaryMul": 0.90, "employMul": 0.92, "adeqMul": 0.92, "source": "AQU 2023 — Ciències"},
+                {"id": "titul__stem__bio", "label": "Biociències", "share": 0.15, "salaryMul": 0.82, "employMul": 0.88, "adeqMul": 0.85, "source": "AQU 2023 — Biociències"},
+                {"id": "titul__stem__altres", "label": "Altres STEM", "share": 0.10, "salaryMul": 0.95, "employMul": 0.95, "adeqMul": 0.95, "source": "AQU 2023 — residu"},
+            ],
+        },
+        {
+            "id": "branca__health", "label": "Salut", "category": "study", "branca": "Health",
+            "children": [
+                {"id": "titul__health__medicina", "label": "Medicina", "share": 0.20, "salaryMul": 1.20, "employMul": 1.02, "adeqMul": 1.08, "source": "AQU 2023 — Ciències salut"},
+                {"id": "titul__health__infermeria", "label": "Infermeria", "share": 0.30, "salaryMul": 0.95, "employMul": 1.02, "adeqMul": 1.05, "source": "AQU 2023 — Infermeria"},
+                {"id": "titul__health__psicologia", "label": "Psicologia", "share": 0.18, "salaryMul": 0.78, "employMul": 0.92, "adeqMul": 0.78, "source": "AQU 2023 — Psicologia"},
+                {"id": "titul__health__farmacia", "label": "Farmàcia i nutrició", "share": 0.15, "salaryMul": 0.92, "employMul": 0.97, "adeqMul": 0.92, "source": "AQU 2023 — Farmàcia"},
+                {"id": "titul__health__fp_sanitat", "label": "FP sanitat (cures, laboratori)", "share": 0.17, "salaryMul": 0.82, "employMul": 0.97, "adeqMul": 0.92, "source": "Cambres 2022 — Sanitat"},
+            ],
+        },
+        {
+            "id": "branca__social", "label": "Socials i jurídiques", "category": "study", "branca": "Social",
+            "children": [
+                {"id": "titul__social__dret", "label": "Dret", "share": 0.18, "salaryMul": 1.05, "employMul": 0.95, "adeqMul": 0.92, "source": "AQU 2023 — Dret"},
+                {"id": "titul__social__empresa", "label": "ADE i empresarials", "share": 0.24, "salaryMul": 1.00, "employMul": 0.97, "adeqMul": 0.95, "source": "AQU 2023 — Empresarials"},
+                {"id": "titul__social__economia", "label": "Economia", "share": 0.10, "salaryMul": 1.08, "employMul": 0.97, "adeqMul": 0.97, "source": "AQU 2023 — Economia"},
+                {"id": "titul__social__educacio", "label": "Mestre / educació", "share": 0.22, "salaryMul": 0.92, "employMul": 0.98, "adeqMul": 1.05, "source": "AQU 2023 — Educació"},
+                {"id": "titul__social__comunicacio", "label": "Comunicació i periodisme", "share": 0.10, "salaryMul": 0.82, "employMul": 0.85, "adeqMul": 0.75, "source": "AQU 2023 — Comunicació"},
+                {"id": "titul__social__altres", "label": "Altres socials", "share": 0.16, "salaryMul": 0.88, "employMul": 0.92, "adeqMul": 0.85, "source": "AQU 2023 — Socials residu"},
+            ],
+        },
+        {
+            "id": "branca__hum", "label": "Humanitats i arts", "category": "study", "branca": "Humanities",
+            "children": [
+                {"id": "titul__hum__filologia", "label": "Llengües i filologies", "share": 0.20, "salaryMul": 0.78, "employMul": 0.88, "adeqMul": 0.72, "source": "AQU 2023 — Filologies"},
+                {"id": "titul__hum__historia_filo", "label": "Història, filosofia, geografia", "share": 0.22, "salaryMul": 0.75, "employMul": 0.85, "adeqMul": 0.65, "source": "AQU 2023 — Humanitats"},
+                {"id": "titul__hum__belles_arts", "label": "Belles arts i disseny", "share": 0.24, "salaryMul": 0.82, "employMul": 0.85, "adeqMul": 0.75, "source": "AQU 2023 — Arts i disseny"},
+                {"id": "titul__hum__audiovisual", "label": "Audiovisuals i música", "share": 0.18, "salaryMul": 0.85, "employMul": 0.85, "adeqMul": 0.78, "source": "AQU 2023 — Audiovisual"},
+                {"id": "titul__hum__traduccio", "label": "Traducció i interpretació", "share": 0.16, "salaryMul": 0.85, "employMul": 0.88, "adeqMul": 0.85, "source": "AQU 2023 — Traducció"},
+            ],
+        },
+        {
+            "id": "branca__services", "label": "Serveis", "category": "study", "branca": "Services",
+            "children": [
+                {"id": "titul__services__turisme", "label": "Turisme i hostaleria", "share": 0.30, "salaryMul": 0.80, "employMul": 0.95, "adeqMul": 0.78, "source": "Cambres 2022 — Hostaleria"},
+                {"id": "titul__services__comerç", "label": "Comerç i màrqueting", "share": 0.22, "salaryMul": 0.90, "employMul": 0.95, "adeqMul": 0.82, "source": "Cambres 2022 — Comerç"},
+                {"id": "titul__services__sociocom", "label": "Serveis sociocomunitaris", "share": 0.18, "salaryMul": 0.78, "employMul": 0.92, "adeqMul": 0.92, "source": "Cambres 2022 — Sociocomunitari"},
+                {"id": "titul__services__imatge", "label": "Imatge personal i estètica", "share": 0.10, "salaryMul": 0.72, "employMul": 0.92, "adeqMul": 0.85, "source": "Cambres 2022 — Imatge"},
+                {"id": "titul__services__informatica_fp", "label": "FP Informàtica i comunicacions", "share": 0.20, "salaryMul": 1.02, "employMul": 1.02, "adeqMul": 0.92, "source": "Cambres 2022 — TIC FP"},
+            ],
+        },
+        {
+            "id": "branca__industry", "label": "Indústria i construcció", "category": "study", "branca": "Industry",
+            "children": [
+                {"id": "titul__industry__electromec", "label": "Electricitat, electrònica i mecànica", "share": 0.30, "salaryMul": 1.05, "employMul": 1.05, "adeqMul": 1.00, "source": "Cambres 2022 — Electromecànica"},
+                {"id": "titul__industry__automocio", "label": "Automoció i transport", "share": 0.18, "salaryMul": 1.00, "employMul": 1.05, "adeqMul": 1.00, "source": "Cambres 2022 — Transport"},
+                {"id": "titul__industry__construccio", "label": "Edificació i obra civil", "share": 0.18, "salaryMul": 0.95, "employMul": 1.00, "adeqMul": 0.95, "source": "Cambres 2022 — Edificació"},
+                {"id": "titul__industry__quimica", "label": "Química i medi ambient", "share": 0.14, "salaryMul": 1.05, "employMul": 0.95, "adeqMul": 0.95, "source": "Cambres 2022 — Química"},
+                {"id": "titul__industry__agrar_alim", "label": "Agrari i alimentari", "share": 0.10, "salaryMul": 0.85, "employMul": 0.92, "adeqMul": 0.90, "source": "Cambres 2022 — Agroalimentari"},
+                {"id": "titul__industry__fusta_textil", "label": "Fusta, tèxtil, arts gràfiques", "share": 0.10, "salaryMul": 0.85, "employMul": 0.92, "adeqMul": 0.88, "source": "Cambres 2022 — Manufactura"},
+            ],
+        },
     ],
     6: [
         {"id": "isco__1", "label": "Directius i gerents", "category": "occupation", "isco": "1"},

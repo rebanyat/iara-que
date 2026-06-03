@@ -67,3 +67,45 @@ export function computeActiveEdges<E extends MinEdge>(
 export function edgeKey(e: MinEdge): string {
 	return `${e.source}__${e.target}`;
 }
+
+/**
+ * From a single edge, return the union of every edge reachable upstream from
+ * its source and downstream from its target. Used to highlight a full path
+ * when the user clicks one segment of the sankey.
+ */
+export function computeEdgeChain<E extends MinEdge>(edges: E[], anchor: MinEdge): Set<string> {
+	const outBy = new Map<string, E[]>();
+	const inBy = new Map<string, E[]>();
+	for (const e of edges) {
+		(outBy.get(e.source) ?? outBy.set(e.source, []).get(e.source)!).push(e);
+		(inBy.get(e.target) ?? inBy.set(e.target, []).get(e.target)!).push(e);
+	}
+
+	const active = new Set<string>([edgeKey(anchor)]);
+	const seenF = new Set<string>();
+	const seenB = new Set<string>();
+
+	const queueF = [anchor.target];
+	while (queueF.length) {
+		const cur = queueF.shift()!;
+		if (seenF.has(cur)) continue;
+		seenF.add(cur);
+		for (const e of outBy.get(cur) ?? []) {
+			active.add(edgeKey(e));
+			queueF.push(e.target);
+		}
+	}
+
+	const queueB = [anchor.source];
+	while (queueB.length) {
+		const cur = queueB.shift()!;
+		if (seenB.has(cur)) continue;
+		seenB.add(cur);
+		for (const e of inBy.get(cur) ?? []) {
+			active.add(edgeKey(e));
+			queueB.push(e.source);
+		}
+	}
+
+	return active;
+}

@@ -12,7 +12,18 @@
 		type SearchTarget
 	} from '$lib/stores/selection';
 	import { datasets, startDatasets } from '$lib/stores/data';
-	import { computeActiveEdges, edgeKey } from '$lib/utils/path';
+	import { computeActiveEdges, computeEdgeChain, edgeKey } from '$lib/utils/path';
+	import { easter } from '$lib/stores/easter';
+
+	type DrillChild = {
+		id: string;
+		label: string;
+		share: number;
+		salaryMul?: number;
+		employMul?: number;
+		adeqMul?: number;
+		source?: string;
+	};
 
 	type RawNode = {
 		id: string;
@@ -22,6 +33,7 @@
 		branca?: string;
 		isco?: string;
 		outcome_score?: number;
+		children?: DrillChild[];
 	};
 
 	type RawEdgeMeta = {
@@ -64,6 +76,8 @@
 	let errorMessage = $state<string>('');
 	let payload = $state<Payload | null>(null);
 	let lastDims = { w: 0, h: 0 };
+	let easterUnlocked = $state(false);
+	let expandedNodes = $state<Set<string>>(new Set());
 
 	const CATEGORY_COLOR: Record<RawNode['category'], string> = {
 		origin: '#7B8395',
@@ -71,6 +85,44 @@
 		occupation: '#FFC857',
 		outcome: '#E0533D'
 	};
+
+	const EASTER_NODES: RawNode[] = [
+		{ id: 'easter__refusal', label: 'Negar la pregunta', layer: 3, category: 'study' },
+		{ id: 'easter__revolt', label: 'Revolucionar-se', layer: 6, category: 'occupation' },
+		{ id: 'easter__utopia', label: 'Salari 0 € · Felicitat 100', layer: 7, category: 'outcome', outcome_score: 1.0 }
+	];
+
+	const EASTER_EDGES: RawEdge[] = [
+		{
+			source: 'start__eso',
+			target: 'easter__refusal',
+			value: 1200,
+			meta: {
+				sourceDataset: 'easter-egg',
+				placeholder: true,
+				composite: 0.9,
+				pctEmployed: 0
+			}
+		},
+		{
+			source: 'easter__refusal',
+			target: 'easter__revolt',
+			value: 1200,
+			meta: { sourceDataset: 'easter-egg', placeholder: true, composite: 0.95 }
+		},
+		{
+			source: 'easter__revolt',
+			target: 'easter__utopia',
+			value: 1200,
+			meta: {
+				sourceDataset: 'easter-egg',
+				placeholder: true,
+				composite: 1.0,
+				medianSalary: 0,
+				pctAdequate: 1.0
+			}
+		}
+	];
 
 	const integerFormat = d3.format(',');
 	const pctFormat = d3.format('.0%');
@@ -142,10 +194,95 @@
 		const svg = d3.select(svgEl);
 		svg.selectAll('*').remove();
 
-		const ids = new Set(p.nodes.map((n) => n.id));
-		const safeNodes = p.nodes.map((n) => ({ ...n }));
-		const safeLinks = p.edges
-			.filter((e) => ids.has(e.source) && ids.has(e.target))
+		const extraNodes = easterUnlocked ? EASTER_NODES : [];
+		const extraEdges = easterUnlocked ? EASTER_EDGES : [];
+
+		// Apply drill-down expansion: replace each expanded node with its children
+		// and rewrite the edges that touched it. Children share the parent's layer.
+		const expandedSet = expandedNodes;
+		const baseNodes = [...p.nodes, ...extraNodes];
+		const baseEdges = [...p.edges, ...extraEdges];
+
+		const replacedNodes = new Map<string, DrillChild[]>();
+		for (const n of baseNodes) {
+			if (n.children && n.children.length > 0 && expandedSet.has(n.id)) {
+				replacedNodes.set(n.id, n.children);
+			}
+		}
+
+		const finalNodes: RawNode[] = [];
+		for (const n of baseNodes) {
+			if (replacedNodes.has(n.id)) {
+				for (const c of replacedNodes.get(n.id)!) {
+					finalNodes.push({
+						id: c.id,
+						layer: n.layer,
+						label: c.label,
+						category: n.category,
+						branca: n.branca,
+						isco: n.isco
+					});
+				}
+			} else {
+				finalNodes.push(n);
+			}
+		}
+
+		const childSrc = (id: string) => {
+			for (const [parent, kids] of replacedNodes) {
+				const c = kids.find((k) => k.id === id);
+				if (c) return { parent, child: c };
+			}
+			return null;
+		};
+
+		const finalEdges: RawEdge[] = [];
+		for (const e of baseEdges) {
+			const sExp = replacedNodes.get(e.source);
+			const tExp = replacedNodes.get(e.target);
+
+			if (!sExp && !tExp) {
+				finalEdges.push(e);
+				continue;
+			}
+
+			// Replace endpoints with each child, scaled by share.
+			const sources = sExp ? sExp.map((c) => ({ id: c.id, share: c.share, child: c })) : [{ id: e.source, share: 1, child: null as DrillChild | null }];
+			const targets = tExp ? tExp.map((c) => ({ id: c.id, share: c.share, child: c })) : [{ id: e.target, share: 1, child: null as DrillChild | null }];
+
+			for (const s of sources) {
+				for (const t of targets) {
+					const share = s.share * t.share;
+					const meta = { ...e.meta };
+					// Apply child modifiers if the child is the "downstream" anchor:
+					// scale composite-driving metrics (salary, employ, adequacy) so the
+					// expanded children carry visibly different mètric contrasts.
+					const mod = (t.child ?? s.child) as DrillChild | null;
+					if (mod) {
+						if (meta.medianSalary !== undefined && mod.salaryMul !== undefined) {
+							meta.medianSalary = Math.round(meta.medianSalary * mod.salaryMul);
+						}
+						if (meta.pctEmployed !== undefined && mod.employMul !== undefined) {
+							meta.pctEmployed = Math.max(0, Math.min(1, meta.pctEmployed * mod.employMul));
+						}
+						if (meta.pctAdequate !== undefined && mod.adeqMul !== undefined) {
+							meta.pctAdequate = Math.max(0, Math.min(1, meta.pctAdequate * mod.adeqMul));
+						}
+						if (meta.composite !== undefined && (mod.salaryMul || mod.employMul || mod.adeqMul)) {
+							const avg = ((mod.salaryMul ?? 1) + (mod.employMul ?? 1) + (mod.adeqMul ?? 1)) / 3;
+							meta.composite = Math.max(0, Math.min(1, meta.composite * avg));
+						}
+						if (mod.source) meta.sourceDataset = mod.source;
+					}
+					finalEdges.push({ source: s.id, target: t.id, value: Math.round(e.value * share), meta });
+				}
+			}
+		}
+
+		const ids = new Set(finalNodes.map((n) => n.id));
+		const safeNodes = finalNodes.map((n) => ({ ...n }));
+		const safeLinks = finalEdges
+			.filter((e) => ids.has(e.source) && ids.has(e.target) && e.value > 0)
 			.map((e) => ({ source: e.source, target: e.target, value: e.value, meta: e.meta }));
 
 		const margin = { top: 20, right: 240, bottom: 20, left: 20 };
@@ -290,8 +427,50 @@
 				tooltip = null;
 			});
 
+		// Build a map id→original-node so we know which rendered nodes have
+		// children available (parents that haven't been expanded yet).
+		const originalById = new Map<string, RawNode>();
+		for (const n of p.nodes) originalById.set(n.id, n);
+
+		const isExpandable = (n: RawNode) =>
+			(n.children && n.children.length > 0) ?? false;
+		const isExpanded = (n: RawNode) => expandedSet.has(n.id);
+		const isChild = (n: RawNode) => n.id.startsWith('titul__');
+
 		// ── Nodes ──────────────────────────────────────────────────────
-		const node = g.append('g').attr('class', 'nodes').selectAll('g').data(result.nodes).enter().append('g');
+		const node = g
+			.append('g')
+			.attr('class', 'nodes')
+			.selectAll('g')
+			.data(result.nodes)
+			.enter()
+			.append('g')
+			.attr('class', (d) => {
+				const nd = d as unknown as RawNode;
+				const cls = ['node'];
+				if (isExpandable(nd)) cls.push('expandable');
+				if (isChild(nd)) cls.push('child');
+				return cls.join(' ');
+			})
+			.attr('cursor', (d) => (isExpandable(d as unknown as RawNode) || isChild(d as unknown as RawNode) ? 'pointer' : 'default'))
+			.on('click', (_event, d) => {
+				const nd = d as unknown as RawNode;
+				if (isExpandable(nd)) {
+					expandedNodes = new Set([...expandedNodes, nd.id]);
+					measureAndRender();
+				} else if (isChild(nd)) {
+					// Collapse the parent that owns this child
+					for (const [pid, kids] of replacedNodes) {
+						if (kids.some((k) => k.id === nd.id)) {
+							const next = new Set(expandedNodes);
+							next.delete(pid);
+							expandedNodes = next;
+							measureAndRender();
+							break;
+						}
+					}
+				}
+			});
 
 		node
 			.append('rect')
@@ -324,9 +503,14 @@
 				return nd.x1 < innerW / 2 ? 'start' : 'end';
 			})
 			.attr('fill', 'var(--ink-primary)')
-			.attr('font-size', 12)
+			.attr('font-size', (d) => (isChild(d as unknown as RawNode) ? 11 : 12))
 			.attr('font-family', 'var(--font-sans)')
-			.text((d) => (d as unknown as RawNode).label);
+			.text((d) => {
+				const nd = d as unknown as RawNode;
+				const isExp = isExpandable(nd);
+				const prefix = isExp ? '+ ' : isChild(nd) ? '↳ ' : '';
+				return prefix + nd.label;
+			});
 
 		applyVisualState();
 	}
@@ -359,7 +543,11 @@
 		const searchActive = currentSearchTarget
 			? computeActiveEdges(payload.edges, [isco1ToNodeId(currentSearchTarget.isco1)])
 			: null;
-		const activeSet = intersect(brancaActive, searchActive);
+		const pinnedChain = currentPinned ? computeEdgeChain(payload.edges, currentPinned) : null;
+		const filterActive = intersect(brancaActive, searchActive);
+		// Intersect filter constraints with the click-chain so clicks reveal the
+		// full upstream+downstream path while still respecting active filters.
+		const activeSet = intersect(filterActive, pinnedChain);
 		const metric = currentFilters.colorMetric;
 
 		links
@@ -373,14 +561,14 @@
 			.attr('stroke-opacity', (d) => {
 				const dd = d as unknown as { source: RawNode; target: RawNode };
 				const k = edgeKey({ source: dd.source.id, target: dd.target.id });
-				const isPinned =
+				const isPinnedAnchor =
 					currentPinned !== null &&
 					isSameEdge({ source: dd.source.id, target: dd.target.id }, currentPinned);
-				if (isPinned) return 0.95;
+				if (isPinnedAnchor) return 0.98;
 				if (activeSet === null) return 0.5;
-				// Slightly stronger highlight when both filters are active
-				const isLayered = brancaActive !== null && searchActive !== null;
-				return activeSet.has(k) ? (isLayered ? 0.85 : 0.7) : 0.08;
+				const isLayered =
+					[brancaActive, searchActive, pinnedChain].filter((x) => x !== null).length >= 2;
+				return activeSet.has(k) ? (isLayered ? 0.88 : 0.75) : 0.08;
 			});
 
 		// Node opacity follows whether any incoming/outgoing edge is active
@@ -444,17 +632,31 @@
 			currentSearchTarget = s.searchTarget;
 			applyVisualState();
 		});
+		const unsubEaster = easter.subscribe((on) => {
+			const changed = easterUnlocked !== on;
+			easterUnlocked = on;
+			if (changed && status === 'ready') measureAndRender();
+		});
 
 		return () => {
 			window.removeEventListener('resize', onResize);
 			unsubFilters();
 			unsubSelection();
 			unsubData();
+			unsubEaster();
 		};
 	});
 </script>
 
-<div class="sankey-wrap" bind:this={containerEl}>
+<div class="sankey-wrap" class:easter-on={easterUnlocked} bind:this={containerEl}>
+	{#if easterUnlocked}
+		<div class="easter-banner" role="status" aria-live="polite">
+			<span class="easter-tag">⌐■_■</span>
+			Path desbloquejat: <strong>Negar la pregunta → Revolucionar-se → Felicitat 100</strong>.
+			Una broma seriosa: la majoria de joves no estem en cap d'aquests camins, però l'estructura
+			ens espera igual. Recarrega la pàgina o lleva <code>?easter=1</code> per amagar-lo.
+		</div>
+	{/if}
 	{#if status === 'loading'}
 		<div class="state-skeleton" aria-hidden="true">
 			<div class="skel-bar skel-1"></div>
@@ -592,6 +794,38 @@
 	.tooltip :global(.num) {
 		font-family: var(--font-mono);
 		font-feature-settings: 'tnum' 1;
+	}
+
+	.easter-banner {
+		position: relative;
+		margin-bottom: var(--sp-3);
+		padding: var(--sp-3) var(--sp-4);
+		background: linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--accent-cool) 18%, transparent),
+			color-mix(in srgb, var(--accent) 18%, transparent)
+		);
+		border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--border-default));
+		border-radius: var(--radius-md);
+		color: var(--ink-primary);
+		font-size: var(--fs-small);
+		line-height: 1.5;
+	}
+
+	.easter-tag {
+		font-family: var(--font-mono);
+		color: var(--accent);
+		font-weight: 700;
+		margin-right: var(--sp-2);
+	}
+
+	.easter-banner code {
+		font-family: var(--font-mono);
+		font-size: var(--fs-micro);
+		padding: 1px 4px;
+		border-radius: var(--radius-sm);
+		background: var(--bg-base);
+		color: var(--ink-secondary);
 	}
 
 	.tooltip :global(.src) {

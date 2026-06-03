@@ -16,6 +16,7 @@
 		isco4: string;
 		isco1: string;
 		iscoLabel: string;
+		langSource?: 'ca' | 'es';
 	};
 
 	let inputEl = $state<HTMLInputElement | null>(null);
@@ -211,7 +212,7 @@
 			id="search-input"
 			type="search"
 			autocomplete="off"
-			placeholder='Vull ser… (prova "fontaner", "infermera", "programador") — prem "/"'
+			placeholder='Vull ser… (prova "lampista", "infermer/a", "programador") — prem "/"'
 			bind:this={inputEl}
 			bind:value={query}
 			oninput={onInput}
@@ -269,6 +270,9 @@
 							onmouseenter={() => (activeIndex = i)}
 						>
 							<span class="item-label">{@html highlight(r.label, query)}</span>
+							{#if r.langSource === 'ca' && r.alt[0] && r.alt[0].toLowerCase() !== r.label.toLowerCase()}
+								<span class="item-sub">{@html highlight(r.alt[0], query)} <span class="lang-tag">ES</span></span>
+							{/if}
 							<span class="item-meta">ISCO {r.isco4} · {r.iscoLabel}</span>
 						</button>
 					{/each}
@@ -510,6 +514,35 @@
 	.item-meta {
 		font-family: var(--font-mono);
 		font-size: var(--fs-micro);
+		color: var(--ink-muted);
+	}
+
+	.item-sub {
+		font-size: var(--fs-micro);
+		color: var(--ink-secondary);
+		font-style: italic;
+		line-height: 1.3;
+		display: flex;
+		align-items: center;
+		gap: var(--sp-2);
+	}
+
+	.item-sub :global(mark) {
+		background: color-mix(in srgb, var(--accent) 60%, transparent);
+		color: var(--ink-primary);
+		padding: 0 2px;
+		border-radius: 2px;
+	}
+
+	.lang-tag {
+		display: inline-block;
+		font-family: var(--font-mono);
+		font-size: 9px;
+		font-style: normal;
+		letter-spacing: 0.05em;
+		padding: 1px 4px;
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-sm);
 		color: var(--ink-muted);
 	}
 </style>

@@ -68,7 +68,12 @@
 
 	const paths = $derived.by((): RenderedPath[] => {
 		if (!features) return [];
-		const projection = d3.geoMercator().fitSize([480, 320], features);
+		// d3.geoIdentity uses planar coordinates and ignores winding order, which is
+		// essential here: a handful of comarques in our generated TopoJSON have
+		// inverted rings that would otherwise make d3.geoBounds return the whole
+		// sphere and collapse a mercator projection. reflectY flips latitude so
+		// north points up after the planar transform.
+		const projection = d3.geoIdentity().reflectY(true).fitSize([480, 320], features);
 		const pathGen = d3.geoPath(projection);
 		const out: RenderedPath[] = [];
 		for (const f of features.features) {

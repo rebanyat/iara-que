@@ -57,9 +57,11 @@
 	<p class="caption">
 		Volums alimentats per <strong>Idescat</strong> i <strong>MEFP</strong>; salari,
 		empleabilitat i adequació, per <strong>AQU</strong> (informes 2023) i
-		<strong>Consell de Cambres</strong> (2022). Passa el cursor per qualsevol aresta per
-		veure'n la mètrica i la font; fes clic per fixar-la. La intensitat del color codifica
-		la mètrica seleccionada més amunt; el gruix, el volum agregat. Existeix una vista en
+		<strong>Consell de Cambres</strong> (2022). Fes <strong>clic en una aresta</strong>
+		per il·luminar el camí complet (origen ↔ destí). Fes <strong>clic en una branca</strong>
+		(STEM, Salut, Indústria…) per <strong>desplegar-ne les titulacions específiques</strong>;
+		clic al fill per replegar. La intensitat del color codifica la mètrica seleccionada més amunt;
+		el gruix, el volum agregat. Existeix una vista en
 		<a href="/?view=table">taula HTML</a> per a lectors de pantalla.
 	</p>
 </section>
