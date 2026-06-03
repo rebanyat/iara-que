@@ -7,6 +7,7 @@
 		clearSearchTarget,
 		type SearchTarget
 	} from '$lib/stores/selection';
+	import { datasets, type WikidataIcon } from '$lib/stores/data';
 
 	type Occupation = {
 		id: string;
@@ -21,12 +22,25 @@
 	let query = $state<string>('');
 	let records = $state<Occupation[]>([]);
 	let index: FlexIndex | null = null;
+	let iconIndex: FlexIndex | null = null;
 	let open = $state<boolean>(false);
 	let focused = $state<boolean>(false);
 	let activeIndex = $state<number>(-1);
 	let results = $state<Occupation[]>([]);
+	let iconResults = $state<WikidataIcon[]>([]);
 
 	const currentTarget = $derived($selection.searchTarget);
+	const icons = $derived.by(() => $datasets.wikidataIcons?.icons ?? []);
+
+	$effect(() => {
+		const list = icons;
+		if (list.length === 0) return;
+		const idx = new FlexIndex({ tokenize: 'forward' });
+		for (let i = 0; i < list.length; i++) {
+			idx.add(i, list[i].label);
+		}
+		iconIndex = idx;
+	});
 
 	onMount(() => {
 		(async () => {
@@ -72,13 +86,24 @@
 	}
 
 	function runSearch(q: string) {
-		if (!index || !q || q.length < 2) {
+		if (!q || q.length < 2) {
 			results = [];
+			iconResults = [];
 			return;
 		}
-		const hits = index.search(q, { limit: 8 }) as unknown as number[];
-		results = hits.map((i) => records[i]).filter(Boolean);
-		activeIndex = results.length > 0 ? 0 : -1;
+		if (index) {
+			const hits = index.search(q, { limit: 8 }) as unknown as number[];
+			results = hits.map((i) => records[i]).filter(Boolean);
+		} else {
+			results = [];
+		}
+		if (iconIndex) {
+			const iconHits = iconIndex.search(q, { limit: 4 }) as unknown as number[];
+			iconResults = iconHits.map((i) => icons[i]).filter(Boolean);
+		} else {
+			iconResults = [];
+		}
+		activeIndex = results.length + iconResults.length > 0 ? 0 : -1;
 	}
 
 	function onInput() {
@@ -100,11 +125,27 @@
 		inputEl?.blur();
 	}
 
+	function selectIcon(r: WikidataIcon) {
+		const target: SearchTarget = {
+			source: 'wikidata',
+			id: r.id,
+			label: r.label,
+			isco1: r.isco1,
+			iscoLabel: r.iscoLabel
+		};
+		setSearchTarget(target);
+		query = r.label;
+		open = false;
+		inputEl?.blur();
+	}
+
+	const totalCount = $derived(results.length + iconResults.length);
+
 	function onKeyDown(e: KeyboardEvent) {
 		if (!open) return;
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
-			activeIndex = Math.min(activeIndex + 1, results.length - 1);
+			activeIndex = Math.min(activeIndex + 1, totalCount - 1);
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
 			activeIndex = Math.max(activeIndex - 1, 0);
@@ -112,6 +153,9 @@
 			if (activeIndex >= 0 && activeIndex < results.length) {
 				e.preventDefault();
 				select(results[activeIndex]);
+			} else if (activeIndex >= results.length && activeIndex < totalCount) {
+				e.preventDefault();
+				selectIcon(iconResults[activeIndex - results.length]);
 			}
 		}
 	}
@@ -132,6 +176,7 @@
 	function clear() {
 		query = '';
 		results = [];
+		iconResults = [];
 		open = false;
 		clearSearchTarget();
 		inputEl?.focus();
@@ -194,32 +239,57 @@
 
 	{#if open && query.length >= 2}
 		<div class="search-listbox" id="search-listbox" role="listbox">
-			{#if results.length === 0}
+			{#if totalCount === 0}
 				<p class="search-empty">No s'ha trobat cap ocupació amb «{query}».</p>
 			{:else}
-				<header class="search-section">
-					Ocupacions ESCO <span class="muted">({results.length})</span>
-				</header>
-				{#each results as r, i (r.id)}
-					<button
-						type="button"
-						class="search-item"
-						class:active={i === activeIndex}
-						role="option"
-						aria-selected={i === activeIndex}
-						onmousedown={(e) => {
-							e.preventDefault();
-							select(r);
-						}}
-						onmouseenter={() => (activeIndex = i)}
-					>
-						<span class="item-label">{@html highlight(r.label, query)}</span>
-						<span class="item-meta">ISCO {r.isco4} · {r.iscoLabel}</span>
-					</button>
-				{/each}
-				<header class="search-section future">
-					Camins icònics (Wikidata) <span class="muted">— arriba properament</span>
-				</header>
+				{#if results.length > 0}
+					<header class="search-section">
+						Ocupacions ESCO <span class="muted">({results.length})</span>
+					</header>
+					{#each results as r, i (r.id)}
+						<button
+							type="button"
+							class="search-item"
+							class:active={i === activeIndex}
+							role="option"
+							aria-selected={i === activeIndex}
+							onmousedown={(e) => {
+								e.preventDefault();
+								select(r);
+							}}
+							onmouseenter={() => (activeIndex = i)}
+						>
+							<span class="item-label">{@html highlight(r.label, query)}</span>
+							<span class="item-meta">ISCO {r.isco4} · {r.iscoLabel}</span>
+						</button>
+					{/each}
+				{/if}
+				{#if iconResults.length > 0}
+					<header class="search-section icon">
+						Camins icònics (Wikidata) <span class="muted">({iconResults.length})</span>
+					</header>
+					{#each iconResults as r, i (r.id)}
+						{@const idx = results.length + i}
+						<button
+							type="button"
+							class="search-item icon-item"
+							class:active={idx === activeIndex}
+							role="option"
+							aria-selected={idx === activeIndex}
+							onmousedown={(e) => {
+								e.preventDefault();
+								selectIcon(r);
+							}}
+							onmouseenter={() => (activeIndex = idx)}
+						>
+							<span class="item-label">{@html highlight(r.label, query)}</span>
+							<span class="item-meta">
+								{r.count} biografies · {r.iscoLabel}
+								{#if r.topFields[0]}· {r.topFields[0].label}{/if}
+							</span>
+						</button>
+					{/each}
+				{/if}
 			{/if}
 		</div>
 	{/if}
@@ -368,8 +438,12 @@
 		border-top: none;
 	}
 
-	.search-section.future {
-		opacity: 0.55;
+	.search-section.icon {
+		color: var(--accent);
+	}
+
+	.icon-item .item-meta {
+		color: color-mix(in srgb, var(--accent) 70%, var(--ink-muted));
 	}
 
 	.search-item {
