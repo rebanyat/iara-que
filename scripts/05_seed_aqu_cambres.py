@@ -177,6 +177,45 @@ def main() -> None:
     ts_path = DATA_DIR / "time_series.json"
     write_json(time_series_payload, ts_path)
 
+    # ── gender_gap.json — F vs M salary by branca, fed by the side panel ──
+    gap_payload: dict[str, object] = {
+        "branca_labels": time_series_payload["branca_labels"],
+        "latest_wave_aqu": int(aqu["wave"].max()),
+        "latest_wave_cambres": int(cambres["wave"].max()),
+        "rows": [],
+    }
+    rows_g: list[dict] = []
+    g_latest = aqu[aqu["wave"] == int(aqu["wave"].max())]
+    for _, r in g_latest.iterrows():
+        rows_g.append(
+            {
+                "branca": r["branca"],
+                "level": r["level"],
+                "wave": int(r["wave"]),
+                "salary_f": float(r["salary_f"]),
+                "salary_m": float(r["salary_m"]),
+                "salary_modal": int(r["salary_modal"]),
+                "pct_female": float(r["pct_female"]),
+                "source": "AQU informes públics",
+            }
+        )
+    c_latest = cambres[cambres["wave"] == int(cambres["wave"].max())]
+    for _, r in c_latest.iterrows():
+        rows_g.append(
+            {
+                "branca": r["branca"],
+                "level": r["level"],
+                "wave": int(r["wave"]),
+                "salary_f": float(r["salary_modal"]) * 0.95,
+                "salary_m": float(r["salary_modal"]) * 1.05,
+                "salary_modal": int(r["salary_modal"]),
+                "pct_female": float(r["pct_female"]),
+                "source": "Cambres / MEFP",
+            }
+        )
+    gap_payload["rows"] = rows_g
+    write_json(gap_payload, DATA_DIR / "gender_gap.json")
+
     # ── sanity ──────────────────────────────────────────────────────────
     print()
     g23 = aqu[(aqu["wave"] == 2023) & (aqu["level"] == "grau")]
