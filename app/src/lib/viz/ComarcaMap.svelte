@@ -119,6 +119,7 @@
 	</header>
 
 	{#if paths.length === 0}
+		<div class="skel" aria-hidden="true"></div>
 		<p class="empty">Carregant comarques…</p>
 	{:else}
 		<svg viewBox="0 0 480 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa coroplètic de Catalunya per comarca">
@@ -216,6 +217,16 @@
 		font-size: var(--fs-small);
 		font-style: italic;
 		padding: var(--sp-3) 0;
+	}
+
+	.skel {
+		min-height: 200px;
+		border-radius: var(--radius-md);
+		background:
+			radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 55%),
+			radial-gradient(circle at 70% 60%, color-mix(in srgb, var(--accent-cool) 14%, transparent), transparent 55%),
+			color-mix(in srgb, var(--bg-surface) 92%, transparent);
+		border: 1px dashed var(--border-default);
 	}
 
 	.legend {

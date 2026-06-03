@@ -230,10 +230,19 @@
 	</div>
 
 	{#if currentTarget}
-		<div class="search-target" aria-live="polite">
-			Objectiu: <strong>{currentTarget.label}</strong>
-			<span class="muted">· {currentTarget.iscoLabel}</span>
-			<button type="button" class="search-clear-target" onclick={() => clearSearchTarget()} aria-label="Treure objectiu">×</button>
+		<div class="search-target" class:icon-target={currentTarget.source === 'wikidata'} aria-live="polite">
+			<div class="target-line">
+				Objectiu: <strong>{currentTarget.label}</strong>
+				<span class="muted">· {currentTarget.iscoLabel}</span>
+				<button type="button" class="search-clear-target" onclick={() => clearSearchTarget()} aria-label="Treure objectiu">×</button>
+			</div>
+			{#if currentTarget.source === 'wikidata'}
+				<p class="target-caveat">
+					Mostra <em>il·lustrativa</em> a partir de biografies de Wikidata: no és inserció reglada
+					ni representativa estadísticament. Útil per veure quins itineraris reals s'associen
+					a aquesta professió, no per quantificar-los.
+				</p>
+			{/if}
 		</div>
 	{/if}
 
@@ -379,8 +388,30 @@
 		color: var(--ink-secondary);
 		border-left: 3px solid var(--accent);
 		display: flex;
+		flex-direction: column;
+		gap: var(--sp-2);
+	}
+
+	.search-target.icon-target {
+		border-left-color: var(--accent-cool);
+	}
+
+	.target-line {
+		display: flex;
 		align-items: center;
 		gap: var(--sp-2);
+	}
+
+	.target-caveat {
+		font-size: var(--fs-micro);
+		color: var(--ink-muted);
+		line-height: 1.5;
+		max-width: 60ch;
+	}
+
+	.target-caveat em {
+		color: var(--accent-cool);
+		font-style: italic;
 	}
 
 	.search-target strong {

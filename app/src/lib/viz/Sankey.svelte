@@ -184,13 +184,29 @@
 			.append('g')
 			.attr('fill', 'none')
 			.attr('class', 'links')
+			.attr('role', 'list')
 			.selectAll('path')
 			.data(result.links)
 			.enter()
 			.append('path')
 			.attr('d', sankeyLinkHorizontal())
 			.attr('stroke-width', (d) => Math.max(1, (d as unknown as { width: number }).width))
-			.attr('cursor', 'pointer');
+			.attr('cursor', 'pointer')
+			.attr('tabindex', 0)
+			.attr('role', 'listitem')
+			.attr('aria-label', (d) => {
+				const dd = d as unknown as {
+					source: RawNode;
+					target: RawNode;
+					value: number;
+					meta: RawEdgeMeta;
+				};
+				const parts = [`${dd.source.label} cap a ${dd.target.label}`, `volum ${integerFormat(dd.value)}`];
+				if (dd.meta.pctEmployed !== undefined) parts.push(`ocupació ${pctFormat(dd.meta.pctEmployed)}`);
+				if (dd.meta.medianSalary !== undefined)
+					parts.push(`salari modal ${integerFormat(Math.round(dd.meta.medianSalary))} euros`);
+				return parts.join(', ');
+			});
 
 		link
 			.on('mousemove', (event, d) => {
@@ -235,6 +251,43 @@
 			.on('click', (_event, d) => {
 				const dd = d as unknown as { source: RawNode; target: RawNode };
 				togglePin({ source: dd.source.id, target: dd.target.id });
+			})
+			.on('keydown', (event, d) => {
+				const ke = event as KeyboardEvent;
+				const dd = d as unknown as { source: RawNode; target: RawNode };
+				if (ke.key === 'Enter' || ke.key === ' ') {
+					ke.preventDefault();
+					togglePin({ source: dd.source.id, target: dd.target.id });
+				} else if (ke.key === 'Escape') {
+					togglePin({ source: dd.source.id, target: dd.target.id }); // unpin if pinned
+				}
+			})
+			.on('focus', (event, d) => {
+				const dd = d as unknown as {
+					source: RawNode;
+					target: RawNode;
+					value: number;
+					meta: RawEdgeMeta;
+				};
+				const pathEl = event.currentTarget as SVGPathElement;
+				const bbox = pathEl.getBoundingClientRect();
+				const rect = containerEl?.getBoundingClientRect();
+				const f = currentFilters;
+				const salary = genderAdjustedSalary(dd.meta, f.gender);
+				const bits: string[] = [];
+				bits.push(`<strong>${dd.source.label}</strong> → <strong>${dd.target.label}</strong>`);
+				bits.push(`Volum: <span class="num">${integerFormat(dd.value)}</span>`);
+				if (dd.meta.pctEmployed !== undefined) bits.push(`Ocupats: ${pctFormat(dd.meta.pctEmployed)}`);
+				if (dd.meta.pctAdequate !== undefined) bits.push(`Adequació al títol: ${pctFormat(dd.meta.pctAdequate)}`);
+				if (salary !== undefined) bits.push(`Salari: ${salaryFormat(salary)}`);
+				tooltip = {
+					x: bbox.right - (rect?.left ?? 0) + 14,
+					y: bbox.top - (rect?.top ?? 0),
+					html: bits.join('<br/>')
+				};
+			})
+			.on('blur', () => {
+				tooltip = null;
 			});
 
 		// ── Nodes ──────────────────────────────────────────────────────
@@ -403,6 +456,13 @@
 
 <div class="sankey-wrap" bind:this={containerEl}>
 	{#if status === 'loading'}
+		<div class="state-skeleton" aria-hidden="true">
+			<div class="skel-bar skel-1"></div>
+			<div class="skel-bar skel-2"></div>
+			<div class="skel-bar skel-3"></div>
+			<div class="skel-bar skel-4"></div>
+			<div class="skel-bar skel-5"></div>
+		</div>
 		<p class="state-msg">Carregant l'atles…</p>
 	{:else if status === 'fetch-error'}
 		<p class="state-msg state-err">
@@ -419,7 +479,7 @@
 	<svg
 		bind:this={svgEl}
 		role="img"
-		aria-label="Sankey d'itineraris formatius i laborals a Catalunya"
+		aria-label="Sankey d'itineraris formatius i laborals a Catalunya. Tabula per recórrer les transicions; Enter o Espai per fixar; Esc per desfixar."
 	></svg>
 
 	{#if tooltip}
@@ -447,11 +507,55 @@
 		min-height: 520px;
 	}
 
+	svg :global(.links path:focus-visible) {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	svg :global(.links path) {
+		outline: none;
+	}
+
+	.state-skeleton {
+		position: absolute;
+		inset: var(--sp-6);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: var(--sp-4);
+		pointer-events: none;
+	}
+
+	.skel-bar {
+		height: 14px;
+		border-radius: var(--radius-pill);
+		background: linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--ink-muted) 14%, transparent),
+			color-mix(in srgb, var(--ink-muted) 28%, transparent),
+			color-mix(in srgb, var(--ink-muted) 14%, transparent)
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.6s ease-in-out infinite;
+	}
+
+	.skel-1 { width: 76%; }
+	.skel-2 { width: 92%; animation-delay: 0.12s; }
+	.skel-3 { width: 64%; animation-delay: 0.24s; }
+	.skel-4 { width: 85%; animation-delay: 0.36s; }
+	.skel-5 { width: 50%; animation-delay: 0.48s; }
+
+	@keyframes shimmer {
+		0% { background-position: 0% 0; }
+		100% { background-position: 200% 0; }
+	}
+
 	.state-msg {
 		position: absolute;
 		inset: 0;
 		display: grid;
-		place-items: center;
+		place-items: end center;
+		padding-bottom: var(--sp-6);
 		color: var(--ink-muted);
 		font-size: var(--fs-small);
 	}
