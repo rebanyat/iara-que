@@ -59,13 +59,70 @@ export interface GenderGapPayload {
 	rows: GenderGapRow[];
 }
 
+export interface ComarcaMetricRow {
+	id: string;
+	name: string;
+	provincia: string;
+	atur_rate: number;
+	ocup_rate: number;
+	placeholder?: boolean;
+}
+
+export interface ComarcaMetricsPayload {
+	source: string;
+	rows: ComarcaMetricRow[];
+}
+
+export interface TimeSeriesPoint {
+	wave: number;
+	pct_employed: number;
+	pct_adequate: number;
+	salary_modal: number;
+	composite_employability: number;
+}
+
+export interface TimeSeriesPayload {
+	branca_labels: Record<string, string>;
+	metrics: string[];
+	series: { branca: string; points: TimeSeriesPoint[] }[];
+}
+
+export interface WikidataIcon {
+	id: string;
+	label: string;
+	isco1: string;
+	iscoLabel: string;
+	count: number;
+	topFields: { label: string; count: number }[];
+	topEducations: { label: string; count: number }[];
+	genderRatio?: { F: number; M: number };
+	source: 'wikidata';
+}
+
+export interface WikidataIconsPayload {
+	generated_at: string;
+	icons: WikidataIcon[];
+}
+
 interface DatasetsState {
 	sankey: SankeyPayload | null;
 	genderGap: GenderGapPayload | null;
+	comarques: ComarcaMetricsPayload | null;
+	comarquesTopo: unknown | null;
+	timeSeries: TimeSeriesPayload | null;
+	wikidataIcons: WikidataIconsPayload | null;
 	error: string | null;
 }
 
-const internal = writable<DatasetsState>({ sankey: null, genderGap: null, error: null });
+const internal = writable<DatasetsState>({
+	sankey: null,
+	genderGap: null,
+	comarques: null,
+	comarquesTopo: null,
+	timeSeries: null,
+	wikidataIcons: null,
+	error: null
+});
 let started = false;
 
 async function loadJson<T>(path: string): Promise<T> {
@@ -74,16 +131,38 @@ async function loadJson<T>(path: string): Promise<T> {
 	return (await res.json()) as T;
 }
 
+async function loadJsonOptional<T>(path: string): Promise<T | null> {
+	try {
+		const res = await fetch(path);
+		if (!res.ok) return null;
+		return (await res.json()) as T;
+	} catch {
+		return null;
+	}
+}
+
 export function startDatasets() {
 	if (started || typeof window === 'undefined') return;
 	started = true;
 	(async () => {
 		try {
-			const [sankey, genderGap] = await Promise.all([
+			const [sankey, genderGap, comarques, comarquesTopo, timeSeries, wikidataIcons] = await Promise.all([
 				loadJson<SankeyPayload>('/data/sankey.json'),
-				loadJson<GenderGapPayload>('/data/gender_gap.json')
+				loadJson<GenderGapPayload>('/data/gender_gap.json'),
+				loadJsonOptional<ComarcaMetricsPayload>('/data/comarques_metrics.json'),
+				loadJsonOptional<unknown>('/data/comarques.topo.json'),
+				loadJsonOptional<TimeSeriesPayload>('/data/time_series.json'),
+				loadJsonOptional<WikidataIconsPayload>('/data/wikidata_icons.json')
 			]);
-			internal.set({ sankey, genderGap, error: null });
+			internal.set({
+				sankey,
+				genderGap,
+				comarques,
+				comarquesTopo,
+				timeSeries,
+				wikidataIcons,
+				error: null
+			});
 		} catch (err) {
 			console.error('datasets load failed:', err);
 			internal.update((s) => ({ ...s, error: err instanceof Error ? err.message : String(err) }));
