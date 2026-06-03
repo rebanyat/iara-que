@@ -3,6 +3,7 @@
 	import FilterChips from '$lib/ui/FilterChips.svelte';
 	import Legend from '$lib/ui/Legend.svelte';
 	import SearchBox from '$lib/ui/SearchBox.svelte';
+	import SidePanel from '$lib/ui/SidePanel.svelte';
 </script>
 
 <svelte:head>
@@ -28,6 +29,7 @@
 	<FilterChips />
 	<Sankey />
 	<Legend />
+	<SidePanel />
 	<p class="caption">
 		Volums alimentats per <strong>Idescat</strong> i <strong>MEFP</strong>; salari,
 		empleabilitat i adequació, per <strong>AQU</strong> (informes 2023) i

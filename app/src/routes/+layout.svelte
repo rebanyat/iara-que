@@ -1,8 +1,18 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+	import { hydrateFromUrl, startUrlSync } from '$lib/utils/urlSync';
+	import { startDatasets } from '$lib/stores/data';
 
 	let { children } = $props();
+
+	onMount(() => {
+		hydrateFromUrl();
+		startDatasets();
+		const stop = startUrlSync();
+		return () => stop();
+	});
 
 	const nav = [
 		{ href: '/', label: 'Atles' },

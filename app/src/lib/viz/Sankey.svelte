@@ -11,6 +11,7 @@
 		type EdgeKey,
 		type SearchTarget
 	} from '$lib/stores/selection';
+	import { datasets, startDatasets } from '$lib/stores/data';
 	import { computeActiveEdges, edgeKey } from '$lib/utils/path';
 
 	type RawNode = {
@@ -362,20 +363,19 @@
 	}
 
 	onMount(() => {
-		(async () => {
-			try {
-				const res = await fetch('/data/sankey.json');
-				if (!res.ok) throw new Error(`HTTP ${res.status}`);
-				payload = (await res.json()) as Payload;
-			} catch (e) {
-				console.error('Failed to load sankey.json:', e);
+		startDatasets();
+		const unsubData = datasets.subscribe((d) => {
+			if (d.error) {
 				status = 'fetch-error';
-				errorMessage = e instanceof Error ? e.message : String(e);
+				errorMessage = d.error;
 				return;
 			}
-			status = 'ready';
-			measureAndRender();
-		})();
+			if (d.sankey) {
+				payload = d.sankey as Payload;
+				status = 'ready';
+				measureAndRender();
+			}
+		});
 
 		const onResize = () => {
 			if (status === 'ready') measureAndRender();
@@ -396,6 +396,7 @@
 			window.removeEventListener('resize', onResize);
 			unsubFilters();
 			unsubSelection();
+			unsubData();
 		};
 	});
 </script>
