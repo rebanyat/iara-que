@@ -17,27 +17,48 @@
 	<p>
 		La meva mare és orientadora professional. Aquest projecte neix per dotar-la d'una eina
 		operativa amb dades reals que cobreixi tots els itineraris formatius i laborals públics
-		de Catalunya en una mateixa vista.
+		de Catalunya en una mateixa vista — d'ESO a la primera feina, passant per FP, batxillerat,
+		grau, màster i la composició salari/adequació/territori que es deriva de cada camí.
 	</p>
 
 	<h2>Llicència</h2>
 	<ul>
 		<li><strong>Codi font</strong> — MIT.</li>
-		<li><strong>Continguts i visualitzacions</strong> — CC BY 4.0.</li>
-		<li><strong>Dades</strong> — cada font conserva la seva llicència; veure <a href="/metodologia">Metodologia</a>.</li>
+		<li><strong>Continguts, visualitzacions, microcopy</strong> — CC BY 4.0.</li>
+		<li><strong>Dades</strong> — cada font conserva la seva llicència; detall a <a href="/metodologia">Metodologia</a>.</li>
 	</ul>
 
 	<h2>Repositori</h2>
 	<p>
-		El codi està disponible públicament a
-		<a href="https://github.com/rebanyat/iara-que">github.com/rebanyat/iara-que</a>.
+		Codi públic a
+		<a href="https://github.com/rebanyat/iara-que" rel="noopener">github.com/rebanyat/iara-que</a>
+		— SvelteKit + D3 + Vercel.
 	</p>
+
+	<h2>Ús d'IA</h2>
+	<p>
+		El procés ha incorporat assistència de l'IA assistent <em>Anthropic Claude</em> per a la
+		implementació de codi i esborrany de text, sota la política d'IA de la UOC. Cada decisió
+		de disseny, valor numèric i decisió de scope s'ha pres i revisat per l'autor. Detall i
+		registre a <a href="/metodologia#ia">Metodologia · IA</a>.
+	</p>
+
+	<h2>Stack i agraïments</h2>
+	<ul>
+		<li><a href="https://kit.svelte.dev" rel="noopener">SvelteKit</a> + <a href="https://d3js.org" rel="noopener">D3.js</a> + <a href="https://vercel.com" rel="noopener">Vercel</a>.</li>
+		<li><a href="https://github.com/topojson/topojson-client" rel="noopener">topojson-client</a> + <a href="https://github.com/nextapps-de/flexsearch" rel="noopener">FlexSearch</a>.</li>
+		<li>Tipografia: <em>Fraunces</em> (titulars), <em>Inter</em> (UI), <em>JetBrains Mono</em> (dades).</li>
+		<li>
+			Topojson de comarques: derivat del repositori obert
+			<a href="https://github.com/sirisacademic/catalonia-cartography" rel="noopener">sirisacademic/catalonia-cartography</a>.
+		</li>
+	</ul>
 </section>
 
 <style>
 	.doc {
 		padding-block: var(--sp-10) var(--sp-12);
-		max-width: 720px;
+		max-width: 760px;
 	}
 
 	.eyebrow {
@@ -78,5 +99,7 @@
 		line-height: var(--lh-loose);
 	}
 
-	p strong { color: var(--ink-primary); }
+	p strong {
+		color: var(--ink-primary);
+	}
 </style>
