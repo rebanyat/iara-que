@@ -1,0 +1,70 @@
+{
+  "_source": "Curated catalog of 'on sóc ara' options for the /vull-ser planner. Each entry maps a natural-language situation to a sankey node id + optional branca hint and a 'years_so_far' rough age anchor (used to estimate when the goal is reachable). The list is opinionated: it tries to cover the situations a Catalan student or worker is most likely to type, not every possible permutation.",
+  "points": [
+    {"id": "now__eso_progress", "label": "Estic fent ESO", "node": "start__eso", "stage": "eso", "branca_hint": null, "years_left_in_stage": 1, "blurb": "Pots reorientar les optatives i la menció dels darrers cursos per encarrilar el camí."},
+    {"id": "now__eso_tecno", "label": "Estic fent 4t ESO menció tecnològica", "node": "start__eso", "stage": "eso", "branca_hint": "branca__stem", "years_left_in_stage": 0, "blurb": "Bona posició per a STEM. La decisió fp/batx és ara."},
+    {"id": "now__eso_artistica", "label": "Estic fent 4t ESO menció artística", "node": "start__eso", "stage": "eso", "branca_hint": "branca__hum", "years_left_in_stage": 0},
+    {"id": "now__eso_humanistica", "label": "Estic fent 4t ESO menció humanística", "node": "start__eso", "stage": "eso", "branca_hint": "branca__hum", "years_left_in_stage": 0},
+    {"id": "now__eso_aplicada", "label": "Estic fent 4t ESO menció aplicada", "node": "start__eso", "stage": "eso", "branca_hint": "branca__industry", "years_left_in_stage": 0, "blurb": "Camí natural cap a FP-GM o continuar batxillerat tecnològic."},
+
+    {"id": "now__batx_cientific", "label": "Estic fent batxillerat científic", "node": "post__batx", "stage": "batx", "branca_hint": "branca__stem", "years_left_in_stage": 1},
+    {"id": "now__batx_tecno", "label": "Estic fent batxillerat tecnològic", "node": "post__batx", "stage": "batx", "branca_hint": "branca__stem", "years_left_in_stage": 1},
+    {"id": "now__batx_humanistic", "label": "Estic fent batxillerat humanístic", "node": "post__batx", "stage": "batx", "branca_hint": "branca__hum", "years_left_in_stage": 1},
+    {"id": "now__batx_social", "label": "Estic fent batxillerat social", "node": "post__batx", "stage": "batx", "branca_hint": "branca__social", "years_left_in_stage": 1},
+    {"id": "now__batx_artistic", "label": "Estic fent batxillerat artístic", "node": "post__batx", "stage": "batx", "branca_hint": "branca__hum", "years_left_in_stage": 1},
+
+    {"id": "now__fpgm_informatica", "label": "Estic fent FP-GM Informàtica i Comunicacions", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__stem", "years_left_in_stage": 1, "family": "informatica"},
+    {"id": "now__fpgm_electromec", "label": "Estic fent FP-GM Electricitat i Electrònica / Mecànica", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__industry", "years_left_in_stage": 1, "family": "electromec"},
+    {"id": "now__fpgm_sanitat", "label": "Estic fent FP-GM Sanitat / Cures Auxiliars", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__health", "years_left_in_stage": 1, "family": "sanitat"},
+    {"id": "now__fpgm_hostaleria", "label": "Estic fent FP-GM Hostaleria i Turisme / Cuina", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__services", "years_left_in_stage": 1, "family": "hostaleria"},
+    {"id": "now__fpgm_administracio", "label": "Estic fent FP-GM Administració i Gestió", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__social", "years_left_in_stage": 1, "family": "admin"},
+    {"id": "now__fpgm_imatge", "label": "Estic fent FP-GM Imatge personal / Estètica", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__services", "years_left_in_stage": 1, "family": "imatge"},
+    {"id": "now__fpgm_arts", "label": "Estic fent FP-GM Arts gràfiques", "node": "post__fp_gm", "stage": "fp_gm", "branca_hint": "branca__hum", "years_left_in_stage": 1, "family": "arts"},
+
+    {"id": "now__fpgs_informatica", "label": "Estic fent FP-GS Desenvolupament d'Aplicacions / Administració de Sistemes", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__stem", "years_left_in_stage": 1, "family": "informatica"},
+    {"id": "now__fpgs_sanitat", "label": "Estic fent FP-GS Sanitat (Imatge per al Diagnòstic, Laboratori, etc.)", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__health", "years_left_in_stage": 1, "family": "sanitat"},
+    {"id": "now__fpgs_electromec", "label": "Estic fent FP-GS Electromecànica / Manteniment", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__industry", "years_left_in_stage": 1, "family": "electromec"},
+    {"id": "now__fpgs_quimica", "label": "Estic fent FP-GS Química industrial", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__industry", "years_left_in_stage": 1, "family": "quimica"},
+    {"id": "now__fpgs_educacio", "label": "Estic fent FP-GS Educació Infantil / Integració Social", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__social", "years_left_in_stage": 1, "family": "educacio"},
+    {"id": "now__fpgs_audiovisual", "label": "Estic fent FP-GS Audiovisuals i Espectacles", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__hum", "years_left_in_stage": 1, "family": "audiovisual"},
+    {"id": "now__fpgs_videojocs", "label": "Estic fent FP-GS Animacions 3D i Jocs Interactius", "node": "post__fp_gs", "stage": "fp_gs", "branca_hint": "branca__stem", "years_left_in_stage": 1, "family": "videojocs"},
+
+    {"id": "now__grau_stem", "label": "Estic fent un grau STEM (enginyeria, ciències)", "node": "titol__grau", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+    {"id": "now__grau_informatica", "label": "Estic fent grau d'Enginyeria Informàtica", "node": "branca__stem", "child_node": "titul__stem__informatica", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+    {"id": "now__grau_industrial", "label": "Estic fent grau d'Enginyeria Industrial", "node": "branca__stem", "child_node": "titul__stem__industrial", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+    {"id": "now__grau_arquitectura", "label": "Estic fent grau d'Arquitectura", "node": "branca__stem", "child_node": "titul__stem__civil_arq", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 3},
+    {"id": "now__grau_mates", "label": "Estic fent grau de Matemàtiques", "node": "branca__stem", "child_node": "titul__stem__ciencies", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+    {"id": "now__grau_fisica", "label": "Estic fent grau de Física", "node": "branca__stem", "child_node": "titul__stem__ciencies", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+    {"id": "now__grau_quimica", "label": "Estic fent grau de Química", "node": "branca__stem", "child_node": "titul__stem__ciencies", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+    {"id": "now__grau_bio", "label": "Estic fent grau de Biologia / Biotecnologia", "node": "branca__stem", "child_node": "titul__stem__bio", "stage": "grau", "branca_hint": "branca__stem", "years_left_in_stage": 2},
+
+    {"id": "now__grau_medicina", "label": "Estic fent grau de Medicina", "node": "branca__health", "child_node": "titul__health__medicina", "stage": "grau", "branca_hint": "branca__health", "years_left_in_stage": 3},
+    {"id": "now__grau_infermeria", "label": "Estic fent grau d'Infermeria", "node": "branca__health", "child_node": "titul__health__infermeria", "stage": "grau", "branca_hint": "branca__health", "years_left_in_stage": 2},
+    {"id": "now__grau_psicologia", "label": "Estic fent grau de Psicologia", "node": "branca__health", "child_node": "titul__health__psicologia", "stage": "grau", "branca_hint": "branca__health", "years_left_in_stage": 2},
+    {"id": "now__grau_farmacia", "label": "Estic fent grau de Farmàcia / Nutrició", "node": "branca__health", "child_node": "titul__health__farmacia", "stage": "grau", "branca_hint": "branca__health", "years_left_in_stage": 2},
+
+    {"id": "now__grau_dret", "label": "Estic fent grau de Dret", "node": "branca__social", "child_node": "titul__social__dret", "stage": "grau", "branca_hint": "branca__social", "years_left_in_stage": 2},
+    {"id": "now__grau_ade", "label": "Estic fent grau d'ADE / Empresarials", "node": "branca__social", "child_node": "titul__social__empresa", "stage": "grau", "branca_hint": "branca__social", "years_left_in_stage": 2},
+    {"id": "now__grau_economia", "label": "Estic fent grau d'Economia", "node": "branca__social", "child_node": "titul__social__economia", "stage": "grau", "branca_hint": "branca__social", "years_left_in_stage": 2},
+    {"id": "now__grau_mestre", "label": "Estic fent grau de Mestre / Educació", "node": "branca__social", "child_node": "titul__social__educacio", "stage": "grau", "branca_hint": "branca__social", "years_left_in_stage": 2},
+    {"id": "now__grau_periodisme", "label": "Estic fent grau de Periodisme / Comunicació", "node": "branca__social", "child_node": "titul__social__comunicacio", "stage": "grau", "branca_hint": "branca__social", "years_left_in_stage": 2},
+
+    {"id": "now__grau_filologia", "label": "Estic fent grau de Filologia / Llengües", "node": "branca__hum", "child_node": "titul__hum__filologia", "stage": "grau", "branca_hint": "branca__hum", "years_left_in_stage": 2},
+    {"id": "now__grau_historia", "label": "Estic fent grau d'Història / Filosofia / Geografia", "node": "branca__hum", "child_node": "titul__hum__historia_filo", "stage": "grau", "branca_hint": "branca__hum", "years_left_in_stage": 2},
+    {"id": "now__grau_arts", "label": "Estic fent grau de Belles Arts / Disseny", "node": "branca__hum", "child_node": "titul__hum__belles_arts", "stage": "grau", "branca_hint": "branca__hum", "years_left_in_stage": 2},
+    {"id": "now__grau_audiovisual", "label": "Estic fent grau de Comunicació Audiovisual", "node": "branca__hum", "child_node": "titul__hum__audiovisual", "stage": "grau", "branca_hint": "branca__hum", "years_left_in_stage": 2},
+    {"id": "now__grau_traduccio", "label": "Estic fent grau de Traducció i Interpretació", "node": "branca__hum", "child_node": "titul__hum__traduccio", "stage": "grau", "branca_hint": "branca__hum", "years_left_in_stage": 2},
+
+    {"id": "now__working_2", "label": "Treballo de professional científic (ISCO 2)", "node": "isco__2", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_3", "label": "Treballo de tècnic (ISCO 3)", "node": "isco__3", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_4", "label": "Treballo de personal administratiu (ISCO 4)", "node": "isco__4", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_5", "label": "Treballo de serveis i venda (ISCO 5)", "node": "isco__5", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_7", "label": "Treballo d'oficial / artesà (ISCO 7)", "node": "isco__7", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_8", "label": "Treballo d'operador d'instal·lacions (ISCO 8)", "node": "isco__8", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_9", "label": "Treballo en ocupacions elementals (ISCO 9)", "node": "isco__9", "stage": "working", "years_left_in_stage": 0},
+    {"id": "now__working_directiu", "label": "Treballo de directiu / gerent (ISCO 1)", "node": "isco__1", "stage": "working", "years_left_in_stage": 0},
+
+    {"id": "now__reorienting", "label": "Em vull reorientar (sóc adult/a)", "node": "start__reorient", "stage": "reorient", "years_left_in_stage": 0, "blurb": "Tens accés a FP de qualsevol nivell i a la Universitat per a Majors de 25/40 anys."},
+    {"id": "now__abandonament", "label": "Vaig abandonar els estudis i ara em vull tornar a posar", "node": "post__abandon", "stage": "reorient", "years_left_in_stage": 0, "blurb": "PFI, accés a ESO d'adults, accés a Cicles de FP-GM per adults a partir dels 17 anys."}
+  ]
+}

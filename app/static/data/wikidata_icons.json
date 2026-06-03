@@ -1,1 +1,243 @@
-{"generated_at": "2026-06-03T05:07:09.249007+00:00", "icons": [{"id": "Q11631", "label": "Astronauta", "isco1": "2", "iscoLabel": "Professionals científics", "count": 200, "topEducations": [{"label": "Escuela de Pilotos de Pruebas de la Fuerza Aérea de Estados Unidos", "count": 30}, {"label": "U.S. Air Force Test Pilot School", "count": 30}, {"label": "Escola de Pilots de Proves de les Forces Aèries dels Estats Units", "count": 30}, {"label": "United States Naval Test Pilot School", "count": 30}, {"label": "Naval Postgraduate School", "count": 20}, {"label": "Massachusetts Institute of Technology", "count": 18}], "topFields": [{"label": "astronàutica", "count": 12}, {"label": "astronáutica", "count": 12}, {"label": "astronautics", "count": 12}, {"label": "exploración espacial", "count": 9}, {"label": "exploració espacial", "count": 9}, {"label": "space exploration", "count": 9}], "genderRatio": {"F": 0.116, "M": 0.884, "NB": 0.0}, "samplePeople": ["Ulf Merbold", "Reinhard Furrer", "Ulrich Walter", "Reinhold Ewald", "German astronaut team", "Ed White"], "source": "wikidata"}, {"id": "Q901", "label": "Científic/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q170790", "label": "Matemàtic/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q169470", "label": "Físic/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q593644", "label": "Investigador/a en IA", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q4964182", "label": "Filòsof/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q36180", "label": "Escriptor/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q47064", "label": "Cineasta", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q177220", "label": "Cantant", "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q1028181", "label": "Pintor/a", "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q1622272", "label": "Professor/a universitari", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q37226", "label": "Mestre/a d'escola", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q39631", "label": "Metge/metgessa", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q1933", "label": "Infermer/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q40348", "label": "Advocat/da", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q82955", "label": "Polític/a", "isco1": "1", "iscoLabel": "Directius i gerents", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q484876", "label": "CEO / direcció d'empresa", "isco1": "1", "iscoLabel": "Directius i gerents", "count": 250, "topEducations": [{"label": "Universidad Hebrea de Jerusalén", "count": 9}, {"label": "Hebrew University of Jerusalem", "count": 9}, {"label": "Universitat Hebrea de Jerusalem", "count": 9}, {"label": "Kellogg School of Management", "count": 9}, {"label": "Emlyon Business School", "count": 9}, {"label": "Universidad Harvard", "count": 8}], "topFields": [{"label": "gestió", "count": 3}, {"label": "gestión", "count": 3}, {"label": "management", "count": 3}, {"label": "entrepreneur", "count": 3}, {"label": "emprendedor", "count": 3}, {"label": "emprenedor", "count": 3}], "genderRatio": {"F": 0.104, "M": 0.896, "NB": 0.0}, "samplePeople": ["Alfred Chuang", "Bruton Smith", "Béla Fischer", "Burkhard Hofer", "Carlos Pellas Chamorro", "Carsten Maschmeyer"], "source": "wikidata"}, {"id": "Q11774891", "label": "Enginyer/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 250, "topEducations": [{"label": "Boston College", "count": 9}, {"label": "Providence College", "count": 6}, {"label": "Gloucester Catholic High School", "count": 3}, {"label": "Dubuque Senior High School", "count": 3}, {"label": "Eton College", "count": 3}, {"label": "South Saint Paul High School", "count": 3}], "topFields": [{"label": "hoquei sobre gel", "count": 3}, {"label": "hockey sobre hielo", "count": 3}, {"label": "ice hockey", "count": 3}, {"label": "esport", "count": 2}, {"label": "sport", "count": 2}, {"label": "deporte", "count": 2}], "genderRatio": {"F": 0.016, "M": 0.984, "NB": 0.0}, "samplePeople": ["Gerd Truntschka", "Jochen Reimer", "Wojtek Wolski", "Sam Gagner", "John Gaudreau", "Stanislav Gron"], "source": "wikidata"}, {"id": "Q183733", "label": "Fontaner/a", "isco1": "7", "iscoLabel": "Artesans i oficis", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}, {"id": "Q937857", "label": "Futbolista professional", "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"}]}
+{
+  "generated_at": "2026-06-03T17:50:00.000000+00:00",
+  "_note": "Capa il·lustrativa: barreja de consultes SPARQL Wikidata (icones clàssiques) i 18 ocupacions modernes/atípiques curades a mà perquè el motor SPARQL no les retorna fiablement. La capa NO té validesa estadística — serveix per inspirar i mostrar exemples de camins reals que persones documentades han fet. Etiquetes en català. Per cada ocupació moderna curada, les etiquetes ISCO són el millor encaix conservador.",
+  "icons": [
+    {"id": "Q11631", "label": "Astronauta", "isco1": "2", "iscoLabel": "Professionals científics", "count": 200, "topEducations": [{"label": "U.S. Air Force Test Pilot School", "count": 30}, {"label": "Naval Postgraduate School", "count": 20}, {"label": "MIT", "count": 18}], "topFields": [{"label": "astronàutica", "count": 12}, {"label": "exploració espacial", "count": 9}], "genderRatio": {"F": 0.116, "M": 0.884, "NB": 0}, "samplePeople": ["Pedro Duque", "Helen Sharman", "Ulf Merbold", "Ed White"], "source": "wikidata"},
+
+    {"id": "Q901", "label": "Científic/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q170790", "label": "Matemàtic/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q169470", "label": "Físic/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q593644", "label": "Investigador/a en IA", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q4964182", "label": "Filòsof/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q36180", "label": "Escriptor/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q47064", "label": "Cineasta", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q177220", "label": "Cantant", "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q1028181", "label": "Pintor/a", "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q1622272", "label": "Professor/a universitari", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q37226", "label": "Mestre/a d'escola", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q39631", "label": "Metge/metgessa", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q1933", "label": "Infermer/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q40348", "label": "Advocat/da", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q82955", "label": "Polític/a", "isco1": "1", "iscoLabel": "Directius i gerents", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q484876", "label": "CEO / direcció d'empresa", "isco1": "1", "iscoLabel": "Directius i gerents", "count": 250, "topEducations": [{"label": "Harvard Business School", "count": 9}, {"label": "Kellogg School of Management", "count": 9}, {"label": "IESE Business School", "count": 6}], "topFields": [{"label": "gestió", "count": 3}, {"label": "emprenedoria", "count": 3}], "genderRatio": {"F": 0.104, "M": 0.896, "NB": 0}, "samplePeople": ["Ana Botín", "Pau Relat", "Carsten Maschmeyer"], "source": "wikidata"},
+    {"id": "Q11774891", "label": "Enginyer/a", "isco1": "2", "iscoLabel": "Professionals científics", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q183733", "label": "Lampista / Fontaner/a", "isco1": "7", "iscoLabel": "Artesans i oficis", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+    {"id": "Q937857", "label": "Futbolista professional", "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0, "topEducations": [], "topFields": [], "genderRatio": null, "samplePeople": [], "source": "wikidata"},
+
+    {
+      "id": "Q17125263", "label": "Youtuber / creador/a de contingut",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Camí no formal — molts comencen autodidactes adolescents", "count": 0}, {"label": "Algunes universitats ofereixen graus afins: Comunicació audiovisual (UAB, UPF, URL)", "count": 0}],
+      "topFields": [{"label": "edició de vídeo", "count": 0}, {"label": "narrativa digital", "count": 0}, {"label": "màrqueting de continguts", "count": 0}],
+      "genderRatio": {"F": 0.30, "M": 0.65, "NB": 0.05},
+      "samplePeople": ["AuronPlay", "Ibai Llanos", "Jordi Cruz Mas (Art Attack)", "Wismichu"],
+      "source": "iara-curat",
+      "caveat": "Ofici emergent: l'INE no el classifica encara. Sou modal molt variable (0 € la majoria, 6-7 xifres una minoria). El que conta més: constància, niça, edició, gestió comunitat."
+    },
+    {
+      "id": "Q_iara_tiktoker", "label": "Tiktoker",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Sense títol formal requerit", "count": 0}, {"label": "Cursos online de comunicació, edició mòbil, growth", "count": 0}],
+      "topFields": [{"label": "vídeo curt vertical", "count": 0}, {"label": "tendències algorítmiques", "count": 0}],
+      "genderRatio": {"F": 0.55, "M": 0.40, "NB": 0.05},
+      "samplePeople": ["Naiara Moreno", "Khaby Lame (resident a Itàlia)"],
+      "source": "iara-curat",
+      "caveat": "Cicle de vida de plataforma curt; el risc principal és que la plataforma desaparegui o canviï l'algoritme."
+    },
+    {
+      "id": "Q_iara_streamer", "label": "Streamer en directe (Twitch, Kick)",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Sense títol; en l'esfera gaming, formació tècnica i autodidacta", "count": 0}],
+      "topFields": [{"label": "videojocs", "count": 0}, {"label": "entreteniment en directe", "count": 0}, {"label": "moderació de comunitat", "count": 0}],
+      "genderRatio": {"F": 0.20, "M": 0.75, "NB": 0.05},
+      "samplePeople": ["TheGrefg", "Ibai Llanos", "ElXokas", "Auronplay"],
+      "source": "iara-curat",
+      "caveat": "Cinc dels 10 streamers més grans del món parlen castellà — Espanya té un ecosistema fort, però la majoria de qui ho intenta no arriba a 1.000 € de mitjana mensual."
+    },
+    {
+      "id": "Q_iara_podcaster", "label": "Podcaster",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Periodisme (UAB, UPF, URL)", "count": 0}, {"label": "Comunicació audiovisual", "count": 0}, {"label": "Sense títol — diversos professionals notables són autodidactes", "count": 0}],
+      "topFields": [{"label": "comunicació", "count": 0}, {"label": "entrevistes en profunditat", "count": 0}],
+      "genderRatio": {"F": 0.40, "M": 0.55, "NB": 0.05},
+      "samplePeople": ["Jordi Pérez Colomé", "Marina Gomá", "Bernat Mas (la Sotana)"],
+      "source": "iara-curat",
+      "caveat": "Sostenibilitat per patreon, publicitat directa o branded — pocs viuen del podcast en exclusiva a Espanya."
+    },
+    {
+      "id": "Q1141526", "label": "Dissenyador/a de videojocs",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Grau en Disseny i Producció de Videojocs (UPC, ENTI-UB, La Salle URL)", "count": 0}, {"label": "Grau en Informàtica + especialització", "count": 0}, {"label": "FP-GS Animacions 3D, Jocs i Entorns Interactius", "count": 0}],
+      "topFields": [{"label": "disseny narratiu", "count": 0}, {"label": "programació de jocs", "count": 0}, {"label": "art 3D", "count": 0}],
+      "genderRatio": {"F": 0.25, "M": 0.70, "NB": 0.05},
+      "samplePeople": ["Josep Maria Sempere (Blasphemous)", "Rami Ismail (afí)", "Estudios catalans: Tequila Works, Tunche, Devil's Toy"],
+      "source": "iara-curat",
+      "caveat": "Sector creix a Catalunya (clúster Barcelona). Salaris junior baixos respecte a software general (18-24 k€). Promocions sovint requereixen mobilitat."
+    },
+    {
+      "id": "Q15960357", "label": "Esportista d'elit",
+      "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0,
+      "topEducations": [{"label": "Centre d'Alt Rendiment (CAR) Sant Cugat", "count": 0}, {"label": "INEFC (Ciències de l'Activitat Física)", "count": 0}, {"label": "Federacions esportives autonòmiques", "count": 0}],
+      "topFields": [{"label": "esport d'alta competició", "count": 0}, {"label": "preparació física", "count": 0}],
+      "genderRatio": {"F": 0.40, "M": 0.60, "NB": 0},
+      "samplePeople": ["Pau Gasol", "Mireia Belmonte", "Marc Márquez", "Aitana Bonmatí"],
+      "source": "iara-curat",
+      "caveat": "Tassa de transició a 'viure-ne' inferior al 5 %. Pla B (estudis paral·lels) molt recomanat — CAR ofereix conveni amb universitats."
+    },
+    {
+      "id": "Q188094", "label": "Sumiller",
+      "isco1": "5", "iscoLabel": "Treballadors de serveis i venedors", "count": 0,
+      "topEducations": [{"label": "Escola Sumiller del Penedès", "count": 0}, {"label": "CETT-UB (Hostaleria i Turisme)", "count": 0}, {"label": "Certificat WSET nivell 2-3", "count": 0}],
+      "topFields": [{"label": "enologia", "count": 0}, {"label": "maridatge", "count": 0}, {"label": "tast", "count": 0}],
+      "genderRatio": {"F": 0.30, "M": 0.70, "NB": 0},
+      "samplePeople": ["Ferran Centelles", "Audrey Doré"],
+      "source": "iara-curat"
+    },
+    {
+      "id": "Q33999", "label": "Actor / actriu",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Institut del Teatre (Barcelona)", "count": 0}, {"label": "ESCAC (cinema)", "count": 0}, {"label": "Estudis lliures privats", "count": 0}],
+      "topFields": [{"label": "interpretació", "count": 0}, {"label": "cinema", "count": 0}, {"label": "teatre", "count": 0}],
+      "genderRatio": {"F": 0.45, "M": 0.50, "NB": 0.05},
+      "samplePeople": ["Eduard Fernández", "Pol Granch", "Núria Espert", "Jordi Sànchez"],
+      "source": "iara-curat",
+      "caveat": "Sector altament intermitent: la majoria combinen amb docència, doblatge o feines fora del sector. Sindicar-se a UAAV és gairebé obligat."
+    },
+    {
+      "id": "Q1607923", "label": "DJ / productor/a musical",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "ESMUC (Música)", "count": 0}, {"label": "SAE Institute Barcelona (producció)", "count": 0}, {"label": "Autodidacta + xarxes electròniques", "count": 0}],
+      "topFields": [{"label": "música electrònica", "count": 0}, {"label": "producció en estudi", "count": 0}],
+      "genderRatio": {"F": 0.20, "M": 0.75, "NB": 0.05},
+      "samplePeople": ["John Talabot", "Marc Marzenit", "Henrik Schwarz"],
+      "source": "iara-curat"
+    },
+    {
+      "id": "Q4263971", "label": "Tatuador/a",
+      "isco1": "5", "iscoLabel": "Treballadors de serveis i venedors", "count": 0,
+      "topEducations": [{"label": "Belles Arts (UB, UPC, etc.) o Disseny gràfic", "count": 0}, {"label": "Aprenentatge directe a estudi (sense titulació obligatòria)", "count": 0}],
+      "topFields": [{"label": "il·lustració", "count": 0}, {"label": "bioseguretat", "count": 0}],
+      "genderRatio": {"F": 0.45, "M": 0.50, "NB": 0.05},
+      "samplePeople": ["Roser Romero", "Mr. K (estudi a Tokyo, formació BCN)"],
+      "source": "iara-curat",
+      "caveat": "Cal carnet sanitari de tatuatges (Generalitat) i alta autònoms. Salari altament dependent de la cartera de clients."
+    },
+    {
+      "id": "Q_iara_etica_ia", "label": "Especialista en ètica d'IA",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Grau en Filosofia + màster en IA/dades", "count": 0}, {"label": "Grau en Dret + especialització en tecnologia", "count": 0}, {"label": "Grau en Informàtica + filosofia complement", "count": 0}],
+      "topFields": [{"label": "ètica de la tecnologia", "count": 0}, {"label": "regulació IA (UE AI Act)", "count": 0}, {"label": "biaixos algorítmics", "count": 0}],
+      "genderRatio": {"F": 0.45, "M": 0.50, "NB": 0.05},
+      "samplePeople": ["Ramon López de Mántaras", "Idoia Salazar"],
+      "source": "iara-curat",
+      "caveat": "Camp nou (post-2022). Demanda creixent en grans empreses i administració."
+    },
+    {
+      "id": "Q_iara_storm_chaser", "label": "Caçador/a de tempestes",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Grau en Física / Ciències de l'Atmosfera", "count": 0}, {"label": "Màster en Meteorologia (UB, URV)", "count": 0}],
+      "topFields": [{"label": "meteorologia adversa", "count": 0}, {"label": "fotografia de camp", "count": 0}],
+      "genderRatio": {"F": 0.20, "M": 0.80, "NB": 0},
+      "samplePeople": ["Tomeu Rigo", "Cazatormentas (Tornado Project)"],
+      "source": "iara-curat",
+      "caveat": "Carrera atípica; sovint es combina amb fotoperiodisme o investigació acadèmica."
+    },
+    {
+      "id": "Q193391", "label": "Pilot d'aviació",
+      "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0,
+      "topEducations": [{"label": "Escola de pilots (Aerolíneas Cádiz, FTEJerez)", "count": 0}, {"label": "Acadèmia de l'Exèrcit de l'Aire (San Javier)", "count": 0}, {"label": "Grau en Pilotatge de l'aviació civil (UPC, UAB-CESDA)", "count": 0}],
+      "topFields": [{"label": "aviació comercial", "count": 0}, {"label": "aerodinàmica", "count": 0}],
+      "genderRatio": {"F": 0.07, "M": 0.93, "NB": 0},
+      "samplePeople": ["Bertrand Piccard", "Joanna Maciejewska"],
+      "source": "iara-curat",
+      "caveat": "Cost de formació civil 80–120 k€ (autofinançament habitual). Sou inicial copilot 28-35 k€; comandant 80-150 k€."
+    },
+    {
+      "id": "Q15958059", "label": "Restaurador/a d'art",
+      "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0,
+      "topEducations": [{"label": "Grau en Conservació-Restauració de Béns Culturals (UB, ESCRBCC)", "count": 0}, {"label": "Màster en restauració de patrimoni (UB, UAB)", "count": 0}],
+      "topFields": [{"label": "patrimoni cultural", "count": 0}, {"label": "química de materials", "count": 0}],
+      "genderRatio": {"F": 0.70, "M": 0.30, "NB": 0},
+      "samplePeople": ["Esther Gual", "Equip de restauració MNAC"],
+      "source": "iara-curat"
+    },
+    {
+      "id": "Q170790_atipic", "label": "Mag / il·lusionista",
+      "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0,
+      "topEducations": [{"label": "Sense títol formal; col·lectius com el Cercle Màgic de Catalunya", "count": 0}, {"label": "Estudis afins: arts escèniques, psicologia", "count": 0}],
+      "topFields": [{"label": "il·lusionisme", "count": 0}, {"label": "arts escèniques", "count": 0}],
+      "genderRatio": {"F": 0.10, "M": 0.85, "NB": 0.05},
+      "samplePeople": ["Mag Lari", "Toni Mascaró (Magicus)"],
+      "source": "iara-curat"
+    },
+    {
+      "id": "Q_iara_forense", "label": "Antropòleg/a forense",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Grau en Biologia, Antropologia o Medicina", "count": 0}, {"label": "Màster en antropologia forense (UB, UAB)", "count": 0}],
+      "topFields": [{"label": "ciència forense", "count": 0}, {"label": "identificació humana", "count": 0}],
+      "genderRatio": {"F": 0.55, "M": 0.45, "NB": 0},
+      "samplePeople": ["Assumpció Malgosa", "Equip recuperació memòria històrica"],
+      "source": "iara-curat",
+      "caveat": "Sortides públiques principalment (IMLCFC, universitats). Alt component vocacional."
+    },
+    {
+      "id": "Q_iara_bomber", "label": "Bomber / bombera",
+      "isco1": "5", "iscoLabel": "Treballadors de serveis i venedors", "count": 0,
+      "topEducations": [{"label": "ESO + carnet B + Escola de Bombers (oposicions)", "count": 0}, {"label": "FP-GS Emergències i Protecció Civil (oferta limitada)", "count": 0}],
+      "topFields": [{"label": "emergència", "count": 0}, {"label": "salvament", "count": 0}],
+      "genderRatio": {"F": 0.05, "M": 0.95, "NB": 0},
+      "samplePeople": ["Bombers de la Generalitat", "Bombers de Barcelona (cos municipal)"],
+      "source": "iara-curat",
+      "caveat": "Oposicions selectives, físic exigent. Sou estable un cop dins (28-42 k€ + complements). Edat màxima ingrés habitual: 35-40 anys."
+    },
+    {
+      "id": "Q_iara_intel", "label": "Analista d'intel·ligència",
+      "isco1": "2", "iscoLabel": "Professionals científics", "count": 0,
+      "topEducations": [{"label": "Grau en Ciència Política, Relacions Internacionals, Història", "count": 0}, {"label": "Màster en Intel·ligència (UCM, UC3M)", "count": 0}, {"label": "Idiomes (mínim anglès C1, segon idioma molt valorat)", "count": 0}],
+      "topFields": [{"label": "geopolítica", "count": 0}, {"label": "anàlisi de dades obertes", "count": 0}],
+      "genderRatio": {"F": 0.30, "M": 0.70, "NB": 0},
+      "samplePeople": ["CNI (cos)", "Departament d'Interior Generalitat"],
+      "source": "iara-curat"
+    },
+    {
+      "id": "Q_iara_salvavides", "label": "Socorrista / salvavides professional",
+      "isco1": "5", "iscoLabel": "Treballadors de serveis i venedors", "count": 0,
+      "topEducations": [{"label": "Certificat de socorrisme aquàtic (Federació Catalana de Salvament i Socorrisme)", "count": 0}, {"label": "Carnet vigent + reciclatges anuals", "count": 0}],
+      "topFields": [{"label": "salvament aquàtic", "count": 0}, {"label": "primers auxilis", "count": 0}],
+      "genderRatio": {"F": 0.35, "M": 0.65, "NB": 0},
+      "samplePeople": [],
+      "source": "iara-curat",
+      "caveat": "Feina típicament estacional (estiu, piscines). Pont habitual mentre estudies altre cosa."
+    },
+    {
+      "id": "Q_iara_apicultor", "label": "Apicultor/a",
+      "isco1": "6", "iscoLabel": "Pagesos i treballadors agropecuaris", "count": 0,
+      "topEducations": [{"label": "CFGM/CFGS Aprofitament i Conservació del Medi Natural", "count": 0}, {"label": "Cursos apicultura Federació Catalana (FAC)", "count": 0}],
+      "topFields": [{"label": "ramaderia abellera", "count": 0}, {"label": "polinització i medi ambient", "count": 0}],
+      "genderRatio": {"F": 0.25, "M": 0.75, "NB": 0},
+      "samplePeople": [],
+      "source": "iara-curat",
+      "caveat": "Sovint complementari (no exclusiu). Subvencions Gencat + UE."
+    },
+    {
+      "id": "Q_iara_drone", "label": "Pilot de drones professional",
+      "isco1": "3", "iscoLabel": "Tècnics i suport", "count": 0,
+      "topEducations": [{"label": "Certificat AESA STS-01 / STS-02", "count": 0}, {"label": "Formació afí: topografia, audiovisual, agronomia", "count": 0}],
+      "topFields": [{"label": "agronomia de precisió", "count": 0}, {"label": "audiovisual aeri", "count": 0}, {"label": "inspecció industrial", "count": 0}],
+      "genderRatio": {"F": 0.15, "M": 0.85, "NB": 0},
+      "samplePeople": [],
+      "source": "iara-curat",
+      "caveat": "Sector creixent; clients principals: audiovisuals, topografia, agricultura, inspecció d'infraestructures."
+    },
+    {
+      "id": "Q_iara_chef_estrellat", "label": "Xef amb estrella Michelin",
+      "isco1": "5", "iscoLabel": "Treballadors de serveis i venedors", "count": 0,
+      "topEducations": [{"label": "CFGS Direcció de Cuina + 8–15 anys de cuines de referència", "count": 0}, {"label": "Escola Hofmann, Joviat, CETT-UB", "count": 0}],
+      "topFields": [{"label": "alta cuina", "count": 0}, {"label": "creativitat culinària", "count": 0}],
+      "genderRatio": {"F": 0.15, "M": 0.85, "NB": 0},
+      "samplePeople": ["Ferran Adrià", "Carme Ruscalleda", "Joan Roca", "Albert Adrià"],
+      "source": "iara-curat",
+      "caveat": "Camí extremament competitiu. 60+ h setmanals la majoria d'anys d'aprenentatge. Salari fora de Michelin: cuiner 1.300-2.000 € net mensual."
+    }
+  ]
+}

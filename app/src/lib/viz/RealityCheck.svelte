@@ -43,7 +43,8 @@
 		<h3>Reality check</h3>
 		<p class="sub">
 			El sankey mostra resultats laborals. Aquesta caixa els relativitza —
-			perquè un salari raonable a 2024 no compra el mateix que el 2010.
+			perquè un salari raonable a 2024 no compra el mateix que el 2010, ni la
+			feina pesa igual sense un sostre on aterrar.
 		</p>
 	</header>
 
@@ -98,6 +99,15 @@
 	header h3 {
 		font-size: 1.05rem;
 		font-weight: 700;
+	}
+
+	header h3::before {
+		content: '03 · ';
+		font-family: var(--font-mono);
+		font-size: var(--fs-micro);
+		letter-spacing: 0.08em;
+		color: var(--ink-muted);
+		font-weight: 500;
 	}
 
 	.sub {

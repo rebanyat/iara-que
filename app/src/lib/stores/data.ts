@@ -104,6 +104,58 @@ export interface WikidataIconsPayload {
 	icons: WikidataIcon[];
 }
 
+export interface LifeGoal {
+	id: string;
+	label: string;
+	blurb: string;
+	isco1: string[];
+	branca: string[];
+	profile: {
+		autonomy?: number;
+		salary?: number;
+		stability?: number;
+		social_impact?: number;
+	};
+	exemplars?: string[];
+	honestly?: string;
+}
+
+export interface LifeGoalsPayload {
+	goals: LifeGoal[];
+}
+
+export interface StartingPoint {
+	id: string;
+	label: string;
+	node: string;
+	child_node?: string;
+	stage: 'eso' | 'batx' | 'fp_gm' | 'fp_gs' | 'grau' | 'working' | 'reorient';
+	branca_hint?: string | null;
+	years_left_in_stage: number;
+	blurb?: string;
+	family?: string;
+}
+
+export interface StartingPointsPayload {
+	points: StartingPoint[];
+}
+
+export interface Resource {
+	id: string;
+	type: 'uni' | 'fp' | 'beca' | 'orientacio' | 'plataforma' | 'sindicat' | 'emprenedoria' | 'idiomes';
+	label: string;
+	url: string;
+	branca: string[];
+	isco1: string[];
+	stage: ('eso' | 'batx' | 'fp_gm' | 'fp_gs' | 'grau' | 'working' | 'reorient')[];
+	tag: string;
+	blurb?: string;
+}
+
+export interface ResourcesPayload {
+	resources: Resource[];
+}
+
 interface DatasetsState {
 	sankey: SankeyPayload | null;
 	genderGap: GenderGapPayload | null;
@@ -111,6 +163,9 @@ interface DatasetsState {
 	comarquesTopo: unknown | null;
 	timeSeries: TimeSeriesPayload | null;
 	wikidataIcons: WikidataIconsPayload | null;
+	lifeGoals: LifeGoalsPayload | null;
+	startingPoints: StartingPointsPayload | null;
+	resources: ResourcesPayload | null;
 	error: string | null;
 }
 
@@ -121,6 +176,9 @@ const internal = writable<DatasetsState>({
 	comarquesTopo: null,
 	timeSeries: null,
 	wikidataIcons: null,
+	lifeGoals: null,
+	startingPoints: null,
+	resources: null,
 	error: null
 });
 let started = false;
@@ -146,13 +204,16 @@ export function startDatasets() {
 	started = true;
 	(async () => {
 		try {
-			const [sankey, genderGap, comarques, comarquesTopo, timeSeries, wikidataIcons] = await Promise.all([
+			const [sankey, genderGap, comarques, comarquesTopo, timeSeries, wikidataIcons, lifeGoals, startingPoints, resources] = await Promise.all([
 				loadJson<SankeyPayload>('/data/sankey.json'),
 				loadJson<GenderGapPayload>('/data/gender_gap.json'),
 				loadJsonOptional<ComarcaMetricsPayload>('/data/comarques_metrics.json'),
 				loadJsonOptional<unknown>('/data/comarques.topo.json'),
 				loadJsonOptional<TimeSeriesPayload>('/data/time_series.json'),
-				loadJsonOptional<WikidataIconsPayload>('/data/wikidata_icons.json')
+				loadJsonOptional<WikidataIconsPayload>('/data/wikidata_icons.json'),
+				loadJsonOptional<LifeGoalsPayload>('/data/life_goals.json'),
+				loadJsonOptional<StartingPointsPayload>('/data/starting_points.json'),
+				loadJsonOptional<ResourcesPayload>('/data/resources.json')
 			]);
 			internal.set({
 				sankey,
@@ -161,6 +222,9 @@ export function startDatasets() {
 				comarquesTopo,
 				timeSeries,
 				wikidataIcons,
+				lifeGoals,
+				startingPoints,
+				resources,
 				error: null
 			});
 		} catch (err) {

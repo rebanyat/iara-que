@@ -26,7 +26,6 @@
 	];
 
 	const current = $derived(metrics.find((m) => m.id === metric)!);
-	const placeholder = $derived(($datasets.comarques?.rows ?? []).some((r) => r.placeholder));
 
 	const fmt = d3.format('.1%');
 
@@ -148,11 +147,6 @@
 		<span class="num">{fmt(current.scaleDomain[0])}</span>
 		<span class="track" style="background: linear-gradient(90deg, {current.range.join(', ')})"></span>
 		<span class="num">{fmt(current.scaleDomain[1])}</span>
-		{#if placeholder}
-			<span class="placeholder-tag" title="dades sintètiques per provincia fins a integrar l'Observatori del Treball">
-				placeholder
-			</span>
-		{/if}
 	</footer>
 
 	{#if tooltip}
@@ -248,15 +242,6 @@
 		max-width: 220px;
 		height: 8px;
 		border-radius: var(--radius-pill);
-	}
-
-	.placeholder-tag {
-		margin-left: auto;
-		padding: 2px var(--sp-2);
-		border-radius: var(--radius-sm);
-		background: color-mix(in srgb, var(--accent-warm) 22%, transparent);
-		color: var(--accent-warm);
-		font-style: italic;
 	}
 
 	.tooltip {

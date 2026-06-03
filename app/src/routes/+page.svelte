@@ -63,6 +63,8 @@
 		clic al fill per replegar. La intensitat del color codifica la mètrica seleccionada més amunt;
 		el gruix, el volum agregat. Existeix una vista en
 		<a href="/?view=table">taula HTML</a> per a lectors de pantalla.
+		Si trobes algun terme que no acabes d'entendre (empleabilitat composta, salari modal,
+		AQU…), al <a href="/metodologia#glossari">glossari</a> els tens definits curt.
 	</p>
 </section>
 

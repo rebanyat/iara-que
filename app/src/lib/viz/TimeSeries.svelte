@@ -15,6 +15,44 @@
 	type Metric = 'composite_employability' | 'pct_employed' | 'salary_modal';
 
 	let metric = $state<Metric>('composite_employability');
+	// IPC adjustment toggle: when on, salary values are deflated to constant
+	// 2024 € so the trend reflects real purchasing power, not nominal growth.
+	// Defaults to ON because the rigorous interpretation of a salary trend
+	// over 10 years is the real one; users can flip off to see the nominal
+	// number AQU reports. Only applied to salary_modal.
+	let inflationAdjusted = $state<boolean>(true);
+
+	// INE Spain IPC index (base 2021=100). Source: INE — Índice de Precios
+	// de Consumo, serie anual general nacional, edicions 2014→2024.
+	// Multipliers below convert nominal € of a given year into constant
+	// 2024 € (real purchasing power in 2024).
+	const IPC: Record<number, number> = {
+		2014: 95.6,
+		2015: 95.1,
+		2016: 95.4,
+		2017: 97.3,
+		2018: 99.0,
+		2019: 99.7,
+		2020: 99.4,
+		2021: 100.0,
+		2022: 108.4,
+		2023: 112.2,
+		2024: 115.7
+	};
+	const IPC_BASE_YEAR = 2024;
+	const IPC_BASE = IPC[IPC_BASE_YEAR];
+
+	function deflate(value: number, sourceYear: number): number {
+		const idx = IPC[sourceYear];
+		if (!idx) return value;
+		return value * (IPC_BASE / idx);
+	}
+
+	function valueOf(p: TimeSeriesPoint): number {
+		const raw = p[metric];
+		if (metric === 'salary_modal' && inflationAdjusted) return deflate(raw, p.wave);
+		return raw;
+	}
 
 	const fmt = d3.format(',');
 	const pctFmt = d3.format('.0%');
@@ -30,7 +68,7 @@
 	const activeBranca = $derived.by(() => new Set<string>($activeSelection.branca));
 
 	const yExtent = $derived.by((): [number, number] => {
-		const values = series.flatMap((s) => s.points.map((p) => p[metric]));
+		const values = series.flatMap((s) => s.points.map((p) => valueOf(p)));
 		if (values.length === 0) return [0, 1];
 		const min = d3.min(values) ?? 0;
 		const max = d3.max(values) ?? 1;
@@ -48,7 +86,7 @@
 
 	function lineFor(points: TimeSeriesPoint[]): string {
 		return points
-			.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(p.wave)} ${yScale(p[metric])}`)
+			.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(p.wave)} ${yScale(valueOf(p))}`)
 			.join(' ');
 	}
 
@@ -56,11 +94,29 @@
 		if (metric === 'salary_modal') return `${fmt(Math.round(v))} €`;
 		return pctFmt(v);
 	}
+
+	const showInflationToggle = $derived(metric === 'salary_modal');
 </script>
 
 <div class="ts-wrap">
 	<header>
-		<h3>Evolució 2014 → 2023</h3>
+		<div class="title">
+			<h3>Evolució 2014 → 2023</h3>
+			{#if showInflationToggle}
+				<button
+					type="button"
+					class="ipc-toggle"
+					class:active={inflationAdjusted}
+					aria-pressed={inflationAdjusted}
+					onclick={() => (inflationAdjusted = !inflationAdjusted)}
+					title={inflationAdjusted
+						? 'Ara veus € reals (constants 2024, base IPC INE). Clica per veure nominal.'
+						: 'Ara veus € nominals. Clica per ajustar a IPC i veure € constants 2024.'}
+				>
+					{inflationAdjusted ? '€ reals 2024' : '€ nominals'}
+				</button>
+			{/if}
+		</div>
 		<div class="metric-switch" role="radiogroup" aria-label="Mètrica de la sèrie temporal">
 			{#each metrics as m (m.id)}
 				<button
@@ -109,19 +165,19 @@
 				{#each s.points as p (p.wave)}
 					<circle
 						cx={xScale(p.wave)}
-						cy={yScale(p[metric])}
+						cy={yScale(valueOf(p))}
 						r={active ? 3.5 : 2}
 						fill={BRANCA_COLOR[s.branca] ?? '#888'}
 						opacity={active ? 1 : 0.3}
 					>
-						<title>{labels[s.branca] ?? s.branca} · {p.wave} · {formatMetric(p[metric])}</title>
+						<title>{labels[s.branca] ?? s.branca} · {p.wave} · {formatMetric(valueOf(p))}{metric === 'salary_modal' && inflationAdjusted ? ' (real 2024)' : ''}</title>
 					</circle>
 				{/each}
 				{@const last = s.points[s.points.length - 1]}
 				<text
 					class="label"
 					x={xScale(last.wave) + 6}
-					y={yScale(last[metric])}
+					y={yScale(valueOf(last))}
 					dominant-baseline="middle"
 					fill={BRANCA_COLOR[s.branca] ?? '#888'}
 					opacity={active ? 1 : 0.4}
@@ -132,9 +188,19 @@
 		</svg>
 
 		<p class="hint">
-			{activeBranca.size > 0
-				? 'Línies destacades: branques al filtre. La resta resten al context.'
-				: 'Quatre onades AQU (graus universitaris). Filtra una branca per fer focus.'}
+			{#if metric === 'salary_modal'}
+				{#if inflationAdjusted}
+					€ constants 2024 (deflactats amb IPC INE base 2021=100). El que sembla
+					creixement nominal és sovint pèrdua de poder adquisitiu.
+				{:else}
+					€ nominals, tal com els reporta AQU. Activa <strong>€ reals 2024</strong> per
+					ajustar a IPC i comparar entre anys.
+				{/if}
+			{:else if activeBranca.size > 0}
+				Línies destacades: branques al filtre. La resta resten al context.
+			{:else}
+				Quatre onades AQU (graus universitaris). Filtra una branca per fer focus.
+			{/if}
 		</p>
 	{/if}
 </div>
@@ -154,9 +220,37 @@
 		gap: var(--sp-3);
 	}
 
+	.title {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+		flex-wrap: wrap;
+	}
+
 	h3 {
 		font-size: 1.05rem;
 		font-weight: 700;
+	}
+
+	.ipc-toggle {
+		font-family: var(--font-mono);
+		font-size: var(--fs-micro);
+		padding: 2px var(--sp-2);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-pill);
+		color: var(--ink-secondary);
+		transition: color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+	}
+
+	.ipc-toggle:hover {
+		color: var(--ink-primary);
+		border-color: var(--border-strong);
+	}
+
+	.ipc-toggle.active {
+		background: color-mix(in srgb, var(--accent-warm) 18%, transparent);
+		border-color: color-mix(in srgb, var(--accent-warm) 50%, var(--border-default));
+		color: var(--accent-warm);
 	}
 
 	.metric-switch {

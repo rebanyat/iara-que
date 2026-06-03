@@ -99,6 +99,163 @@
 		<dd>Mediana de mesos fins a la primera feina qualificada (AQU).</dd>
 	</dl>
 
+	<h2 id="glossari">Glossari</h2>
+	<p>
+		Termes que es repeteixen al llarg de l'atles, definits curts perquè qualsevol persona
+		(orientadors, famílies, alumnat 4t ESO) pugui llegir-lo sense haver de googlejar.
+	</p>
+	<dl>
+		<dt id="g-empleabilitat">Empleabilitat composta</dt>
+		<dd>
+			Índex propi (no oficial) que resumeix la qualitat laboral d'un camí en un sol número
+			0–1. Combina ocupació, adequació, salari i contracte indefinit. Veure
+			<a href="#metriques">Mètriques derivades</a> per a la fórmula exacta.
+		</dd>
+
+		<dt id="g-salari-modal">Salari modal</dt>
+		<dd>
+			Tram salarial més freqüent dins d'una cohort (graduats d'una branca / titulació). No
+			és la mitjana ni la mediana — és el <em>més habitual</em>. AQU el reporta perquè és
+			menys distorsionat pels valors extrems que la mitjana.
+		</dd>
+
+		<dt id="g-adequacio">Adequació al títol</dt>
+		<dd>
+			% de persones graduades que treballen en una feina que exigeix el títol que tenen.
+			Si treballes de cambrer amb un grau de filologia, no comptes com a "adequat". Mesura
+			la sobrequalificació pràctica del mercat.
+		</dd>
+
+		<dt id="g-ocupacio">Taxa d'ocupació</dt>
+		<dd>
+			% de la cohort que té feina al moment de l'enquesta (3 anys després de graduar-se,
+			AQU). Inclou autònoms i contractes parcials.
+		</dd>
+
+		<dt id="g-atur">Taxa d'atur</dt>
+		<dd>
+			% d'actius (persones que volen treballar) sense feina. Diferent de la d'ocupació
+			perquè exclou els inactius (estudiants, cura, etc.).
+		</dd>
+
+		<dt id="g-branca">Branca</dt>
+		<dd>
+			Agrupació gran d'estudis. L'atles utilitza les 6 branques d'AQU: STEM, Salut,
+			Socials i jurídiques, Humanitats i arts, Serveis, Indústria i construcció.
+		</dd>
+
+		<dt id="g-isco">ISCO-08</dt>
+		<dd>
+			Classificació Internacional Uniforme d'Ocupacions, de l'Organització Internacional
+			del Treball (OIT). 10 grups grans (ISCO-1: directius, científics, tècnics, etc.).
+			A iara és la capa "ocupació" del sankey.
+		</dd>
+
+		<dt id="g-esco">ESCO</dt>
+		<dd>
+			Classificació europea d'habilitats, competències, qualificacions i ocupacions. Versió
+			detallada d'ISCO amb 3.043 ocupacions a Catalunya (cobertura aproximada). L'utilitzem
+			al cercador "Vull ser…".
+		</dd>
+
+		<dt id="g-fp">FP-GM / FP-GS</dt>
+		<dd>
+			Formació Professional de Grau Mitjà (després d'ESO, durada 2 anys) i de Grau Superior
+			(després de batxillerat o FP-GM, durada 2 anys). FP-GS dona accés directe a graus
+			universitaris afins.
+		</dd>
+
+		<dt id="g-aqu">AQU Catalunya</dt>
+		<dd>
+			Agència per a la Qualitat del Sistema Universitari de Catalunya. Publica cada 3 anys
+			l'enquesta d'inserció laboral dels graduats. Font principal de salari, ocupació i
+			adequació al nostre atles.
+		</dd>
+
+		<dt id="g-idescat">Idescat</dt>
+		<dd>
+			Institut d'Estadística de Catalunya. Aporta les cohorts demogràfiques i les taules
+			d'inserció laboral de graduats universitaris (ilgu).
+		</dd>
+
+		<dt id="g-mefp">MEFP</dt>
+		<dd>
+			Ministeri d'Educació, Formació Professional i Esports d'Espanya. Estadística estatal
+			d'FP — matrícula per modalitat, titularitat i comunitat autònoma.
+		</dd>
+
+		<dt id="g-cambres">Consell de Cambres</dt>
+		<dd>
+			Consell General de Cambres de Catalunya. Estudi d'inserció laboral dels ensenyaments
+			professionals (FP-GM i FP-GS) per famílies professionals. Anàleg de l'AQU per a FP.
+		</dd>
+
+		<dt id="g-sepe">SEPE</dt>
+		<dd>
+			Servei Públic d'Ocupació Estatal. Estadística mensual de contractació, atur registrat
+			i sortides laborals per CCAA.
+		</dd>
+
+		<dt id="g-observatori">Observatori del Treball</dt>
+		<dd>
+			Servei de la Generalitat amb consultes interactives de contractació, atur i salaris
+			per comarca. Origen de les dades de mapa territorial.
+		</dd>
+
+		<dt id="g-wikidata">Wikidata</dt>
+		<dd>
+			Base de dades col·laborativa lligada a Wikipedia. La capa "camins icònics" del cercador
+			extrau les titulacions de figures notables (astronauta, Nobel, etc.) — és il·lustrativa,
+			no estadística.
+		</dd>
+
+		<dt id="g-ipc">IPC (Índex de Preus de Consum)</dt>
+		<dd>
+			Mesura mensual de la variació de preus d'una cistella representativa, publicada per
+			l'INE. L'utilitzem per convertir salaris nominals a € constants 2024 (toggle a
+			<em>Evolució 2014→2023</em>).
+		</dd>
+
+		<dt id="g-poder">Poder adquisitiu</dt>
+		<dd>
+			Quantitat real de béns i serveis que pots comprar amb un sou. Cau quan els preus
+			pugen més de pressa que el salari nominal. Els salaris reportats per AQU són
+			nominals: a "Reality check" els relativitzem.
+		</dd>
+
+		<dt id="g-placeholder">Placeholder</dt>
+		<dd>
+			Etiqueta tècnica que marca valors estimats provisionalment perquè la font definitiva
+			encara no està integrada. Avui el mapa comarcal porta xifres sintetitzades per
+			província; quan integrem l'Observatori del Treball s'eliminarà.
+		</dd>
+	</dl>
+
+	<h2 id="dades-grolleres">Sobre la granularitat de les dades</h2>
+	<p>
+		Els salaris i taxes que veus al sankey són <strong>agregats per branca</strong>
+		(AQU 2023, Cambres 2022). Això significa que una persona concreta amb un títol concret
+		pot tenir un salari molt diferent del que llegim aquí — un graduat en Enginyeria
+		Informàtica i una graduada en Filologia STEM apareixen al mateix node "STEM" amb la
+		mateixa mètrica, encara que les realitats individuals divergeixen molt.
+	</p>
+	<p>
+		Per atenuar aquest efecte, fer clic sobre una branca al sankey la desplega en 5–6
+		titulacions específiques (capes "↳" per a Enginyeria informàtica, Medicina, Dret,
+		etc.) aplicant <em>multiplicadors</em> sobre la mètrica de la branca. Aquests
+		multiplicadors són una <strong>aproximació</strong> basada en l'Annex per estudi
+		dels informes AQU i no en una explotació per titulació de la microdada — AQU no
+		publica aquesta resolució. Quan una administració publiqui dades per titulació
+		desagregades amb sample suficient, el codi està preparat per substituir els
+		multiplicadors per dades reals (camp <code>children</code> de cada node branca a
+		<code>sankey.json</code>).
+	</p>
+	<p>
+		Resumit: les xifres serveixen per <strong>comparar camins entre si</strong> i per
+		entendre tendències; no per a pronosticar el sou d'una persona concreta. Per a
+		això, parla amb un orientador del SOC o del teu institut.
+	</p>
+
 	<h2 id="biaixos">Biaixos i limitacions identificats</h2>
 	<ul>
 		<li>
@@ -118,8 +275,9 @@
 			no reglats no figuren en cap font, però ocupen una fracció rellevant del mercat.
 		</li>
 		<li>
-			<strong>Biaix territorial</strong>: el mapa actual <em>encara és placeholder</em>
-			per provincia. La substitució per dades reals de l'Observatori és pendent.
+			<strong>Biaix territorial</strong>: el mapa comarcal mostra estimacions per
+			província interpolades a comarca, perquè l'Observatori del Treball encara no està
+			integrat. Per això les diferències intra-província s'aplanen.
 		</li>
 		<li>
 			<strong>Wikidata</strong>: representa figures notables (sobre-representació de
@@ -213,6 +371,16 @@
 	dt {
 		color: var(--ink-primary);
 		font-weight: 600;
+		scroll-margin-top: calc(var(--header-h) + var(--sp-3));
+	}
+
+	dt[id]::before {
+		content: '§';
+		font-family: var(--font-mono);
+		color: var(--ink-muted);
+		font-weight: 400;
+		font-size: 0.8em;
+		margin-right: var(--sp-2);
 	}
 
 	dd {

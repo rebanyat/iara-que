@@ -3,6 +3,8 @@
 	import GenderDumbbell from '$lib/viz/GenderDumbbell.svelte';
 	import ComarcaMap from '$lib/viz/ComarcaMap.svelte';
 	import TimeSeries from '$lib/viz/TimeSeries.svelte';
+	import PurchasingPower from '$lib/viz/PurchasingPower.svelte';
+	import HousingStability from '$lib/viz/HousingStability.svelte';
 	import RealityCheck from '$lib/viz/RealityCheck.svelte';
 	import { activeSelection } from '$lib/stores/activeSelection';
 	import { clearSearchTarget } from '$lib/stores/selection';
@@ -60,6 +62,14 @@
 
 		<section class="card">
 			<TimeSeries />
+		</section>
+
+		<section class="card card-wide critique-card power-card">
+			<PurchasingPower />
+		</section>
+
+		<section class="card card-wide critique-card housing-card">
+			<HousingStability />
 		</section>
 
 		<section class="card card-wide reality-card">
@@ -153,6 +163,24 @@
 
 	.card-wide {
 		grid-column: 1 / -1;
+	}
+
+	.power-card {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--accent) 7%, var(--bg-elev)) 0%,
+			var(--bg-elev) 100%
+		);
+		border-color: color-mix(in srgb, var(--accent) 22%, var(--border-subtle));
+	}
+
+	.housing-card {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--accent-cool) 7%, var(--bg-elev)) 0%,
+			var(--bg-elev) 100%
+		);
+		border-color: color-mix(in srgb, var(--accent-cool) 22%, var(--border-subtle));
 	}
 
 	.reality-card {
