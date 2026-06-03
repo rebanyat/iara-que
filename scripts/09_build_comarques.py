@@ -15,7 +15,6 @@ from __future__ import annotations
 import json
 
 import requests
-import shapely.geometry as sgeom
 from topojson import Topology
 
 from lib import CACHE_DIR, DATA_DIR, banner, log
@@ -40,12 +39,6 @@ def _fetch_geo() -> None:
     log(f"saved {GEO_LOCAL.stat().st_size / 1024:.1f} KB")
 
 
-def _simplify_geom(geom_geojson: dict, tol: float) -> dict:
-    shape = sgeom.shape(geom_geojson)
-    simplified = shape.simplify(tol, preserve_topology=True)
-    return sgeom.mapping(simplified)
-
-
 def main() -> None:
     banner("09 · comarques")
 
@@ -58,9 +51,6 @@ def main() -> None:
         props = {k: v for k, v in f["properties"].items() if k in keep_props}
         if "nom_comar" not in props:
             continue
-        # Geometry simplification — tolerance in geographic degrees
-        # ~0.003° ≈ 300 m at Catalonia's latitude, plenty for a national map
-        geom = _simplify_geom(f["geometry"], tol=0.003)
         features.append({
             "type": "Feature",
             "properties": {
@@ -68,14 +58,21 @@ def main() -> None:
                 "name": props["nom_comar"],
                 "provincia": str(props.get("provincia", "")),
             },
-            "geometry": geom,
+            "geometry": f["geometry"],
         })
-    log(f"{len(features)} comarca features after simplification")
+    log(f"{len(features)} comarca features kept")
 
     fc = {"type": "FeatureCollection", "features": features}
 
-    # Convert to TopoJSON for compactness
-    topo = Topology(fc, prequantize=False).to_dict()
+    # Topology-preserving simplification done by the topojson library.
+    # prequantize=1e5 collapses identical coordinates so arcs deduplicate;
+    # toposimplify=0.0003 (geo degrees) drops vertices below ~30 m of detail.
+    topo = Topology(
+        fc,
+        prequantize=True,
+        topology=True,
+        toposimplify=0.0003,
+    ).to_dict()
     topo_path = DATA_DIR / "comarques.topo.json"
     topo_path.write_text(json.dumps(topo, ensure_ascii=False))
     log(f"wrote {topo_path.relative_to(DATA_DIR.parent.parent)} ({topo_path.stat().st_size / 1024:.1f} KB)")
