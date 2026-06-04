@@ -71,7 +71,7 @@
 <style>
 	.hero {
 		padding-block: var(--sp-10) var(--sp-6);
-		max-width: 880px;
+		max-width: 1200px;
 	}
 
 	.eyebrow {
@@ -101,7 +101,6 @@
 
 	.lede {
 		margin-top: var(--sp-6);
-		max-width: 65ch;
 		font-size: 1.125rem;
 		line-height: var(--lh-loose);
 		color: var(--ink-secondary);
@@ -142,7 +141,6 @@
 
 	.caption {
 		margin: 0;
-		max-width: 72ch;
 		color: var(--ink-muted);
 		font-size: var(--fs-small);
 		line-height: 1.55;
