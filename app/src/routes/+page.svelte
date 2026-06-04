@@ -40,19 +40,20 @@
 	<SearchBox />
 	<FilterChips />
 
-	<div class="viz-head">
-		<p class="caption">
-			Volums alimentats per <strong>Idescat</strong> i <strong>MEFP</strong>; salari,
-			empleabilitat i adequació, per <strong>AQU</strong> (informes 2023) i
-			<strong>Consell de Cambres</strong> (2022). Fes <strong>clic en una aresta</strong>
-			per il·luminar el camí complet (origen ↔ destí). Fes <strong>clic en una branca</strong>
-			(STEM, Salut, Indústria…) per <strong>desplegar-ne les titulacions específiques</strong>;
-			clic al fill per replegar. La intensitat del color codifica la mètrica seleccionada;
-			el gruix, el volum agregat. Existeix una vista en
-			<a href="/?view=table">taula HTML</a> per a lectors de pantalla. Si trobes algun
-			terme que no acabes d'entendre, al <a href="/metodologia#glossari">glossari</a>
-			els tens definits curt.
-		</p>
+	<p class="caption">
+		Volums alimentats per <strong>Idescat</strong> i <strong>MEFP</strong>; salari,
+		empleabilitat i adequació, per <strong>AQU</strong> (informes 2023) i
+		<strong>Consell de Cambres</strong> (2022). Fes <strong>clic en una aresta</strong>
+		per il·luminar el camí complet (origen ↔ destí). Fes <strong>clic en una branca</strong>
+		(STEM, Salut, Indústria…) per <strong>desplegar-ne les titulacions específiques</strong>;
+		clic al fill per replegar. La intensitat del color codifica la mètrica seleccionada;
+		el gruix, el volum agregat. Existeix una vista en
+		<a href="/?view=table">taula HTML</a> per a lectors de pantalla. Si trobes algun
+		terme que no acabes d'entendre, al <a href="/metodologia#glossari">glossari</a>
+		els tens definits curt.
+	</p>
+
+	<div class="view-toggle">
 		<a href={toggleHref} data-sveltekit-keepfocus data-sveltekit-noscroll class="view-link">
 			{view === 'table' ? '← Tornar al sankey' : 'Vista en taula (accessible) →'}
 		</a>
@@ -120,23 +121,6 @@
 		display: flex;
 		justify-content: flex-end;
 		margin-bottom: var(--sp-3);
-	}
-
-	.viz-head {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: var(--sp-4);
-		align-items: end;
-		margin-bottom: var(--sp-4);
-	}
-
-	@media (max-width: 720px) {
-		.viz-head {
-			grid-template-columns: 1fr;
-		}
-		.viz-head .view-link {
-			justify-self: end;
-		}
 	}
 
 	.view-link {
