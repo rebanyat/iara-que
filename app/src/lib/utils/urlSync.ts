@@ -10,12 +10,7 @@ import {
 	type Gender,
 	type BrancaId
 } from '$lib/stores/filters';
-import {
-	selection,
-	setSearchTarget,
-	clearSearchTarget,
-	type SearchTarget
-} from '$lib/stores/selection';
+import { selection, setSearchTarget, type SearchTarget } from '$lib/stores/selection';
 
 /**
  * Two-way sync between the URL search params and the filter + selection
@@ -139,5 +134,3 @@ export function startUrlSync(): () => void {
 
 // Expose helpers used in tests / debugging
 export const _internal = { encodeTarget, decodeTarget, brancaShort, brancaLong };
-// Silence unused warning for clearSearchTarget if URL never asks for it
-void clearSearchTarget;
