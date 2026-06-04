@@ -6,6 +6,7 @@
 	import {
 		selection,
 		togglePin,
+		clearPin,
 		isSameEdge,
 		isco1ToNodeId,
 		type EdgeKey,
@@ -78,6 +79,14 @@
 	let lastDims = { w: 0, h: 0 };
 	let easterUnlocked = $state(false);
 	let expandedNodes = $state<Set<string>>(new Set());
+
+	// Pan/zoom state. We keep the live d3-zoom transform separately so re-renders
+	// (filters, drill-down, resize) can restore the view instead of snapping back.
+	const ZOOM_MIN = 1;
+	const ZOOM_MAX = 6;
+	let zoomTransform = $state<d3.ZoomTransform>(d3.zoomIdentity);
+	let zoomScaleDisplay = $state(1);
+	let zoomBehavior: d3.ZoomBehavior<SVGSVGElement, unknown> | null = null;
 
 	const CATEGORY_COLOR: Record<RawNode['category'], string> = {
 		origin: '#7B8395',
@@ -314,7 +323,13 @@
 			.attr('viewBox', `0 0 ${innerW + margin.left + margin.right} ${innerH + margin.top + margin.bottom}`)
 			.attr('preserveAspectRatio', 'xMidYMid meet');
 
-		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+		const gOuter = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+		// All zoomable content lives inside zoom-root; the outer translate keeps
+		// the margin fixed while only the chart pans/zooms.
+		const g = gOuter.append('g').attr('class', 'zoom-root');
+		// Re-apply the latest pan/zoom state after a re-layout so filters and
+		// expand/collapse don't snap the view back to identity.
+		g.attr('transform', zoomTransform.toString());
 
 		// ── Links ──────────────────────────────────────────────────────
 		const link = g
@@ -396,7 +411,8 @@
 					ke.preventDefault();
 					togglePin({ source: dd.source.id, target: dd.target.id });
 				} else if (ke.key === 'Escape') {
-					togglePin({ source: dd.source.id, target: dd.target.id }); // unpin if pinned
+					ke.preventDefault();
+					clearPin();
 				}
 			})
 			.on('focus', (event, d) => {
@@ -603,8 +619,50 @@
 		}
 	}
 
+	function attachZoom() {
+		if (!svgEl) return;
+		const svg = d3.select<SVGSVGElement, unknown>(svgEl);
+		zoomBehavior = d3
+			.zoom<SVGSVGElement, unknown>()
+			.scaleExtent([ZOOM_MIN, ZOOM_MAX])
+			// Wheel-zoom requires Cmd/Ctrl so plain wheel keeps scrolling the page
+			// (no scroll-trap on a long article). Drag-pan needs the primary button
+			// only. dblclick is disabled below; it conflicts with edge selection.
+			.filter((event: Event) => {
+				if (event.type === 'wheel') {
+					const we = event as WheelEvent;
+					return we.ctrlKey || we.metaKey;
+				}
+				const me = event as MouseEvent;
+				return me.button === 0;
+			})
+			.on('zoom', (event) => {
+				zoomTransform = event.transform;
+				zoomScaleDisplay = event.transform.k;
+				svg.select<SVGGElement>('.zoom-root').attr('transform', event.transform.toString());
+			});
+		svg.call(zoomBehavior).on('dblclick.zoom', null);
+	}
+
+	function applyZoom(factor: number) {
+		if (!svgEl || !zoomBehavior) return;
+		d3.select<SVGSVGElement, unknown>(svgEl)
+			.transition()
+			.duration(180)
+			.call(zoomBehavior.scaleBy, factor);
+	}
+
+	function resetZoom() {
+		if (!svgEl || !zoomBehavior) return;
+		d3.select<SVGSVGElement, unknown>(svgEl)
+			.transition()
+			.duration(220)
+			.call(zoomBehavior.transform, d3.zoomIdentity);
+	}
+
 	onMount(() => {
 		startDatasets();
+		attachZoom();
 		const unsubData = datasets.subscribe((d) => {
 			if (d.error) {
 				status = 'fetch-error';
@@ -678,10 +736,40 @@
 		</p>
 	{/if}
 
+	{#if status === 'ready'}
+		<div class="zoom-controls" role="group" aria-label="Zoom del sankey">
+			<button
+				type="button"
+				class="zoom-btn"
+				onclick={() => applyZoom(1.4)}
+				aria-label="Apropar"
+				title="Apropar (+)"
+				disabled={zoomScaleDisplay >= ZOOM_MAX - 0.001}
+			>+</button>
+			<button
+				type="button"
+				class="zoom-btn"
+				onclick={() => applyZoom(1 / 1.4)}
+				aria-label="Allunyar"
+				title="Allunyar (−)"
+				disabled={zoomScaleDisplay <= ZOOM_MIN + 0.001}
+			>−</button>
+			<button
+				type="button"
+				class="zoom-btn reset"
+				onclick={resetZoom}
+				aria-label="Restablir zoom"
+				title="Restablir zoom (0)"
+				disabled={zoomScaleDisplay <= ZOOM_MIN + 0.001 && zoomTransform.x === 0 && zoomTransform.y === 0}
+			>⤾</button>
+			<span class="zoom-scale" aria-live="polite">{zoomScaleDisplay.toFixed(1)}×</span>
+		</div>
+	{/if}
+
 	<svg
 		bind:this={svgEl}
 		role="img"
-		aria-label="Sankey d'itineraris formatius i laborals a Catalunya. Tabula per recórrer les transicions; Enter o Espai per fixar; Esc per desfixar."
+		aria-label="Sankey d'itineraris formatius i laborals a Catalunya. Tabula per recórrer les transicions; Enter o Espai per fixar; Esc per desfixar. Cmd o Ctrl + roda per apropar; arrossega per moure; o utilitza els botons del cantó superior dret."
 	></svg>
 
 	{#if tooltip}
@@ -707,6 +795,83 @@
 		width: 100%;
 		height: auto;
 		min-height: 520px;
+		cursor: grab;
+		touch-action: none;
+	}
+
+	svg:active {
+		cursor: grabbing;
+	}
+
+	svg :global(.zoom-root .links path),
+	svg :global(.zoom-root .nodes g) {
+		cursor: pointer;
+	}
+
+	.zoom-controls {
+		position: absolute;
+		top: var(--sp-4);
+		right: var(--sp-4);
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+		padding: 4px;
+		background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-sm);
+		z-index: 5;
+		backdrop-filter: saturate(140%) blur(6px);
+	}
+
+	.zoom-btn {
+		width: 28px;
+		height: 28px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-mono);
+		font-size: 14px;
+		line-height: 1;
+		color: var(--ink-secondary);
+		border-radius: var(--radius-sm);
+		border: 1px solid transparent;
+		transition:
+			background var(--dur-2) var(--ease),
+			color var(--dur-2) var(--ease),
+			border-color var(--dur-2) var(--ease);
+	}
+
+	.zoom-btn:hover:not(:disabled),
+	.zoom-btn:focus-visible:not(:disabled) {
+		color: var(--ink-primary);
+		border-color: var(--border-default);
+		background: var(--bg-elev);
+	}
+
+	.zoom-btn:disabled {
+		opacity: 0.35;
+		cursor: not-allowed;
+	}
+
+	.zoom-btn.reset {
+		font-size: 16px;
+	}
+
+	.zoom-scale {
+		min-width: 36px;
+		padding: 0 var(--sp-2);
+		font-family: var(--font-mono);
+		font-size: var(--fs-micro);
+		color: var(--ink-muted);
+		text-align: center;
+		font-feature-settings: 'tnum' 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.zoom-controls :global(*) {
+			transition: none !important;
+		}
 	}
 
 	svg :global(.links path:focus-visible) {
