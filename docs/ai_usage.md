@@ -6,17 +6,17 @@ Conforme a la política de la UOC i al pla docent de l'assignatura
 
 ## Eina utilitzada
 
-- **Model**: Anthropic Claude (Opus 4.7).
+- **Models**: Anthropic Claude, Google Gemini, OpenAI Chat GPT
 - **Modalitat**: instruccions detallades pas a pas escrites per l'autor,
-  amb revisió manual del codi i del text generat abans de qualsevol
+  amb revisió manual del codi abans de qualsevol
   commit o publicació.
 
 ## Objectius
 
 1. **Acceleració del pipeline ETL** — paral·lelitzar la lectura/parse
-   dels CSV/XLS d'origen (Idescat, MEFP, SEPE, ESCO, AQU/Cambres).
+   dels CSV/XLS i d'altres arxius d'origen (Idescat, MEFP, SEPE, ESCO, AQU/Cambres).
 2. **Implementació del front** (SvelteKit + D3) — components reutilitzables,
-   stores reactius, transicions D3.
+   stores reactius, transicions D3. Informació sobre les eines i consells sobre la metodologia.
 3. **Esborrany de microcopy i metodologia** — primera versió de la pàgina
    `/metodologia`, headings dels panels, tooltips.
 
