@@ -21,9 +21,9 @@
 	<header>
 		<h3>Sense sostre, no hi ha estabilitat</h3>
 		<p class="sub">
-			La feina ja no és la palanca per construir una vida; l'<em>habitatge</em> ho és.
-			I el primer ha tornat a ser inaccessible. La impossibilitat d'emancipar-se a temps
-			no és un fracàs individual: és una decisió política que es pot revertir.
+			La feina ja no és la palanca per a construir una vida; l'<em>habitatge</em>
+			ho és. I l'habitatge ha tornat a ser inaccessible. No poder-se emancipar a
+			temps no és un fracàs individual: és una decisió política que es pot revertir.
 		</p>
 	</header>
 
@@ -35,12 +35,12 @@
 		</li>
 		<li>
 			<span class="num warm">{pct(0.929)}</span>
-			<span class="label">del salari mediana jove per pagar un lloguer <span class="ctx">CJE 2024</span></span>
-			<span class="contrast">la recomanació INE és ≤ 30 %</span>
+			<span class="label">del salari mitjà jove per pagar un lloguer <span class="ctx">CJE 2024</span></span>
+			<span class="contrast">la recomanació de l'INE és ≤ 30 %</span>
 		</li>
 		<li>
 			<span class="num cool">{pct(0.18)}</span>
-			<span class="label">joves 25–29 que viuen sols <span class="ctx">vs {pct(0.41)} el 2008</span></span>
+			<span class="label">joves de 25 a 29 anys que viuen sols <span class="ctx">enfront del {pct(0.41)} el 2008</span></span>
 			<span class="contrast">la dependència familiar prolongada s'ha tornat estructural</span>
 		</li>
 	</ul>
@@ -50,25 +50,25 @@
 		<ul>
 			<li>
 				<a href="https://sindicatdellogateres.org" target="_blank" rel="noreferrer">Sindicat de Llogateres</a>
-				· acompanyament gratuït per defensar-te d'increments abusius i de mobbing immobiliari.
-				La llei 12/2023 limita la pujada però hi ha qui la incompleix.
+				· acompanyament gratuït per a defensar-te d'augments abusius i d'assetjament
+				immobiliari. La llei 12/2023 limita les pujades, però hi ha qui la incompleix.
 			</li>
 			<li>
-				<a href="https://habitatge.gencat.cat/web/.content/lloguer/bo-jove-lloguer.html" target="_blank" rel="noreferrer">Bo lloguer jove 250 €/mes</a>
-				· no resol el preu però alleugereix dos anys a joves &lt;35 anys.
+				<a href="https://habitatge.gencat.cat" target="_blank" rel="noreferrer">Bo lloguer jove de 250 €/mes</a>
+				· no resol el preu, però alleugereix dos anys als joves menors de 35.
 			</li>
 			<li>
-				<a href="https://desnonaments.gencat.cat" target="_blank" rel="noreferrer">Servei d'intermediació davant d'un desnonament</a>
-				· si rep una demanda d'execució, no signis res sense parlar abans aquí.
+				<a href="https://habitatge.gencat.cat" target="_blank" rel="noreferrer">Servei d'intermediació davant d'un desnonament</a>
+				· si reps una demanda d'execució, no signis res sense parlar-ne abans aquí.
 			</li>
 			<li>
-				<a href="https://habitatge.barcelona/ca/lloguer-public" target="_blank" rel="noreferrer">Borses d'habitatge públic + assequible</a>
-				· apuntar-se aviat és gratis i no et compromet a res.
+				<a href="https://habitatge.barcelona/ca" target="_blank" rel="noreferrer">Borses d'habitatge públic i assequible</a>
+				· apuntar-s'hi aviat és gratuït i no et compromet a res.
 			</li>
 		</ul>
 		<p class="rally">
-			Tenir feina sense tenir casa és l'única estabilitat que t'ofereix el mercat. Estabilitat real
-			s'aconsegueix conquerint-la junts.
+			Tenir feina sense tenir casa és l'única estabilitat que t'ofereix el mercat.
+			L'estabilitat real es conquereix col·lectivament.
 		</p>
 	</aside>
 </div>

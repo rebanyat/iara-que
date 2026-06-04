@@ -149,12 +149,13 @@
 
 <section class="container intro">
 	<p class="eyebrow">Planificador · explora itineraris</p>
-	<h1>Estic <em>aquí</em>, vull arribar <em>allà</em></h1>
+	<h1><em>I ara…</em> què?</h1>
 	<p class="lede">
-		Tria <strong>on ets ara</strong> i <strong>on vols arribar</strong>. Et calculo els camins
-		documentats més òptims segons les dades agregades de l'atles i et suggereixo recursos
-		públics concrets per a cada etapa. Pots triar un objectiu concret (metge, lampista,
-		youtuber…) o un objectiu vital (tenir un negoci, salari alt, viure de l'art…).
+		Tria <strong>on ets ara</strong> i <strong>cap a on vols anar</strong>. Et calculo els
+		camins documentats més òptims a partir de les dades agregades de l'atles i et
+		suggereixo recursos públics concrets per a cada etapa. Pots triar un objectiu concret
+		(metge, lampista, youtuber…) o un objectiu vital (tenir un negoci propi, salari alt,
+		viure de l'art…).
 	</p>
 </section>
 
@@ -162,12 +163,13 @@
 	<div class="step-card" class:complete={selectedStart !== null}>
 		<header>
 			<span class="step-num">1</span>
-			<h2>On ets ara?</h2>
+			<h2><em>I ara…</em></h2>
 		</header>
+		<p class="step-sub">Què estàs fent en aquest moment de la teva vida formativa o laboral?</p>
 		<div class="start-box">
 			<input
 				type="text"
-				placeholder="Escriu o tria de la llista (p. ex. 'grau matemàtiques', 'FP-GM informàtica', 'treballant ISCO 5')"
+				placeholder="Escriu o tria de la llista (p. ex. «grau de matemàtiques», «FP-GM informàtica», «treballo a serveis»)"
 				bind:value={startQuery}
 				oninput={() => (showStartList = true)}
 				onfocus={() => (showStartList = true)}
@@ -197,27 +199,30 @@
 	<div class="step-card" class:complete={selectedGoal !== null || escoTarget !== null}>
 		<header>
 			<span class="step-num">2</span>
-			<h2>On vols arribar?</h2>
+			<h2><em>què?</em></h2>
 		</header>
+		<p class="step-sub">Cap a on vols anar — pot ser un ofici concret o un objectiu vital.</p>
 
-		<p class="sub-hint">Per oficis concrets (metge, lampista, youtuber, sumiller…):</p>
+		<p class="sub-hint">Oficis concrets (metge, lampista, youtuber, sumiller…)</p>
 		<div class="esco-wrap">
 			<SearchBox />
 		</div>
 
-		<p class="sub-hint">…o per objectius vitals:</p>
-		<div class="goals-grid">
-			{#each lifeGoals as g (g.id)}
-				<button
-					type="button"
-					class="goal-card"
-					class:active={selectedGoal?.id === g.id}
-					onclick={() => pickGoal(g)}
-				>
-					<span class="goal-label">{g.label}</span>
-					<span class="goal-blurb">{g.blurb}</span>
-				</button>
-			{/each}
+		<p class="sub-hint">Objectius vitals (desplaça per veure'ls tots)</p>
+		<div class="goals-scroll">
+			<div class="goals-grid">
+				{#each lifeGoals as g (g.id)}
+					<button
+						type="button"
+						class="goal-card"
+						class:active={selectedGoal?.id === g.id}
+						onclick={() => pickGoal(g)}
+					>
+						<span class="goal-label">{g.label}</span>
+						<span class="goal-blurb">{g.blurb}</span>
+					</button>
+				{/each}
+			</div>
 		</div>
 
 		{#if selectedGoal}
@@ -353,11 +358,15 @@
 
 	h1 {
 		font-size: var(--fs-h1);
+		font-family: var(--font-serif);
+		font-weight: 900;
+		line-height: 1.05;
 	}
 
 	h1 em {
 		color: var(--accent);
 		font-style: italic;
+		font-weight: 500;
 	}
 
 	.lede {
@@ -425,8 +434,22 @@
 	}
 
 	.step-card h2 {
-		font-size: 1.2rem;
+		font-size: 1.4rem;
+		font-family: var(--font-serif);
 		font-weight: 700;
+	}
+
+	.step-card h2 em {
+		font-style: italic;
+		color: var(--accent);
+	}
+
+	.step-sub {
+		font-size: var(--fs-small);
+		color: var(--ink-secondary);
+		margin-top: calc(var(--sp-2) * -1);
+		margin-bottom: var(--sp-2);
+		line-height: 1.4;
 	}
 
 	.start-box {
@@ -529,6 +552,24 @@
 
 	.esco-wrap {
 		margin-bottom: var(--sp-3);
+	}
+
+	.goals-scroll {
+		max-height: 260px;
+		overflow-y: auto;
+		padding-right: var(--sp-2);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		padding: var(--sp-2);
+		background: color-mix(in srgb, var(--bg-base) 50%, transparent);
+	}
+
+	.goals-scroll::-webkit-scrollbar {
+		width: 6px;
+	}
+	.goals-scroll::-webkit-scrollbar-thumb {
+		background: var(--border-default);
+		border-radius: 3px;
 	}
 
 	.goals-grid {

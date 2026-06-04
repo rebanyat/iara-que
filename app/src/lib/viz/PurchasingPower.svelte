@@ -16,46 +16,48 @@
 
 <div class="critique">
 	<header>
-		<h3>Salari nominal puja, salari real cau</h3>
+		<h3>El salari nominal puja, el salari real cau</h3>
 		<p class="sub">
-			Els <em>números</em> dels informes laborals miren bé en €. Però el que el sou
-			compra cada any és menys, perquè l'IPC corre més de pressa que els convenis.
-			Per això la sindicació importa: sense pressió col·lectiva no hi ha actualitzacions.
+			Les <em>xifres</em> dels informes laborals fan bona cara en €. Però el que el
+			sou et compra cada any és menys, perquè l'IPC corre més de pressa que els convenis.
+			Per això la sindicació importa: sense pressió col·lectiva, no hi ha actualitzacions.
 		</p>
 	</header>
 
 	<ul class="metrics">
 		<li>
 			<span class="num accent">−7 %</span>
-			<span class="label">salari real mediana Catalunya <span class="ctx">2014 → 2023, € constants</span></span>
-			<span class="contrast">malgrat que en nominal va pujar +18 %</span>
+			<span class="label">salari real mitjà a Catalunya <span class="ctx">2014 → 2023, en € constants</span></span>
+			<span class="contrast">malgrat que en termes nominals ha pujat un +18 %</span>
 		</li>
 		<li>
 			<span class="num warm">{pct(0.143)}</span>
-			<span class="label">afiliació sindical a Catalunya <span class="ctx">vs {pct(0.22)} mitjana UE-27</span></span>
-			<span class="contrast">on menys sindicació, menys actualització salarial</span>
+			<span class="label">afiliació sindical a Catalunya <span class="ctx">enfront del {pct(0.22)} de mitjana a la UE-27</span></span>
+			<span class="contrast">a menys sindicació, menys actualització salarial</span>
 		</li>
 		<li>
 			<span class="num cool">{pct(0.28)}</span>
-			<span class="label">joves assalariats en temporal <span class="ctx">16–29 anys, EPA 2024 T1</span></span>
+			<span class="label">joves assalariats amb contracte temporal <span class="ctx">16–29 anys, EPA 2024 T1</span></span>
 			<span class="contrast">la temporalitat erosiona la capacitat de negociar</span>
 		</li>
 	</ul>
 
 	<aside class="hope">
-		<p class="hope-title">Què pots fer per pressionar el sou real</p>
+		<p class="hope-title">Què pots fer per pressionar el salari real</p>
 		<ul>
 			<li>
 				<a href="https://www.ccoo.cat/joves" target="_blank" rel="noreferrer">Afilia't a un sindicat jove</a>
-				· quota reduïda primer any, assessoria laboral gratuïta, i pes a la mesa de negociació del teu sector.
+				· quota reduïda el primer any, assessorament laboral gratuït i veu a la taula
+				de negociació del teu sector.
 			</li>
 			<li>
-				<a href="https://web.gencat.cat/ca/tramits/tramits-temes/Convenis-collectius" target="_blank" rel="noreferrer">Consulta el conveni del teu sector</a>
-				· molts són caducats i obligar-ne la renovació toca al treballador, no a l'empresa.
+				<a href="https://treball.gencat.cat" target="_blank" rel="noreferrer">Consulta el conveni del teu sector</a>
+				· molts són caducats i obligar-ne la renovació depèn dels treballadors, no
+				pas de l'empresa.
 			</li>
 			<li>
-				<a href="https://www.epa.ine.es" target="_blank" rel="noreferrer">Compara el teu sou real amb l'EPA</a>
-				· veure si pagues "preu jove" et dona arguments concrets per renegociar.
+				<a href="https://www.ine.es/prensa/epa_tabla.htm" target="_blank" rel="noreferrer">Compara el teu salari real amb l'EPA</a>
+				· veure si cobres «preu jove» et dona arguments concrets per renegociar.
 			</li>
 		</ul>
 	</aside>

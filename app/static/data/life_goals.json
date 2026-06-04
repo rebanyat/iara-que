@@ -4,7 +4,7 @@
     {
       "id": "goal__own_business",
       "label": "Tenir un negoci propi",
-      "blurb": "Autonomia + risc + sostre alt. Compatible amb gairebé qualsevol formació de base, però sol passar per FP-GS o grau + un mànager/empresarial complement.",
+      "blurb": "Autonomia, risc i sostre alt. Compatible amb gairebé qualsevol formació de base; el més habitual és combinar un FP-GS o un grau amb formació complementària en gestió o empresarials.",
       "isco1": ["1", "5", "7"],
       "branca": ["branca__services", "branca__industry", "branca__social"],
       "profile": { "autonomy": 1.0, "salary": 0.7, "stability": 0.2, "social_impact": 0.3 },
@@ -13,7 +13,7 @@
     {
       "id": "goal__restaurant",
       "label": "Tenir un restaurant",
-      "blurb": "Subtipus de 'negoci propi' molt comú a Catalunya. Camí típic: FP-GM Cuina → FP-GS Direcció Cuina o Hostaleria + 3–5 anys de cuina assalariat per fer caixa i contactes.",
+      "blurb": "Variant habitual del «negoci propi» a Catalunya. Camí típic: FP-GM Cuina → FP-GS Direcció de Cuina o d'Hostaleria + 3–5 anys de cuina assalariat per agafar ofici, fer caixa i teixir contactes.",
       "isco1": ["1", "5"],
       "branca": ["branca__services"],
       "profile": { "autonomy": 0.9, "salary": 0.5, "stability": 0.2, "social_impact": 0.4 },
@@ -22,7 +22,7 @@
     {
       "id": "goal__research",
       "label": "Fer recerca pública",
-      "blurb": "Universitat o CSIC. Estabilitat retardada (post-doc 5–7 anys), sou modest per a formació, vocació forta. Catalunya té massa crítica ICREA, BIST, BSC.",
+      "blurb": "Universitat o CSIC. L'estabilitat arriba tard (post-doc de 5–7 anys), sou modest tenint en compte la formació, vocació imprescindible. Catalunya té massa crítica: ICREA, BIST, BSC.",
       "isco1": ["2"],
       "branca": ["branca__stem", "branca__health", "branca__hum", "branca__social"],
       "profile": { "autonomy": 0.6, "salary": 0.4, "stability": 0.6, "social_impact": 0.8 }
@@ -30,7 +30,7 @@
     {
       "id": "goal__public_service",
       "label": "Servei públic / oposicions",
-      "blurb": "Estabilitat alta un cop dins. Demana grau (cossos A1) o batxillerat (C1/C2). Anys d'oposicions són la inversió principal.",
+      "blurb": "Estabilitat alta un cop hi entres. Demana grau (cossos A1) o batxillerat (C1/C2). Els anys d'oposició són la inversió principal.",
       "isco1": ["2", "3", "4"],
       "branca": ["branca__social", "branca__stem", "branca__health"],
       "profile": { "autonomy": 0.3, "salary": 0.6, "stability": 1.0, "social_impact": 0.7 },
@@ -39,7 +39,7 @@
     {
       "id": "goal__high_salary",
       "label": "Salari alt encara que sigui dur",
-      "blurb": "El camí més fiable a Catalunya: enginyeria + idiomes + multinacional. També finances, dret de gran despatx, o medicina especialitzada privada.",
+      "blurb": "El camí més fiable a Catalunya: enginyeria amb idiomes a una multinacional. També finances, dret de gran despatx o medicina especialitzada a la privada.",
       "isco1": ["1", "2"],
       "branca": ["branca__stem", "branca__health", "branca__social"],
       "profile": { "autonomy": 0.4, "salary": 1.0, "stability": 0.6, "social_impact": 0.2 }
@@ -47,7 +47,7 @@
     {
       "id": "goal__remote",
       "label": "Feina remota / autonomia geogràfica",
-      "blurb": "Anglès + tech + senioritat. Sectors: software, traducció, consultoria, dissseny, contingut. Catalunya té bons salaris per a remote nòrdic/USA.",
+      "blurb": "Anglès, perfil tech i senioritat. Sectors: programari, traducció, consultoria, disseny, creació de continguts. Des de Catalunya es pot accedir a salaris elevats fent remot per a empreses nord-europees o nord-americanes.",
       "isco1": ["2", "3"],
       "branca": ["branca__stem", "branca__hum", "branca__services"],
       "profile": { "autonomy": 0.9, "salary": 0.7, "stability": 0.4, "social_impact": 0.2 }
@@ -55,7 +55,7 @@
     {
       "id": "goal__creative",
       "label": "Feina creativa",
-      "blurb": "Arts visuals, disseny, audiovisual, música, escriptura. Salaris modestos per la majoria; freelance habitual. Vocació + portfolio + networking pesa més que la titulació.",
+      "blurb": "Arts visuals, disseny, audiovisual, música, escriptura. Salaris modestos per a la majoria; el règim d'autònom és habitual. Vocació, portafolis i xarxa de contactes pesen més que la titulació.",
       "isco1": ["2", "3", "7"],
       "branca": ["branca__hum"],
       "profile": { "autonomy": 0.8, "salary": 0.3, "stability": 0.2, "social_impact": 0.6 }
@@ -63,7 +63,7 @@
     {
       "id": "goal__hands_on",
       "label": "Feina manual / d'ofici",
-      "blurb": "FP-GM/GS + carnet + experiència. La crisi d'habitatge ha disparat la demanda de lampistes, electricistes, soldadors, fusters. Sous reals millors que molts graus.",
+      "blurb": "FP-GM/GS, carnet professional i experiència de taller. La crisi d'habitatge ha disparat la demanda de lampistes, electricistes, soldadors i fusters. Els salaris reals són sovint millors que els de molts graus.",
       "isco1": ["7", "8"],
       "branca": ["branca__industry", "branca__services"],
       "profile": { "autonomy": 0.6, "salary": 0.7, "stability": 0.7, "social_impact": 0.4 },
@@ -72,7 +72,7 @@
     {
       "id": "goal__care",
       "label": "Cuidar persones / sanitat",
-      "blurb": "Branca Salut + vocació social. Estable, ben pagada respecte a la mitjana, però desgastant. Va des de FP-GS Cures Auxiliars fins a Medicina + MIR.",
+      "blurb": "Branca Salut amb vocació social. Feina estable i ben pagada respecte a la mitjana, però desgastant. Des de l'FP-GS de Cures Auxiliars fins al grau de Medicina seguit del MIR.",
       "isco1": ["2", "3", "5"],
       "branca": ["branca__health"],
       "profile": { "autonomy": 0.4, "salary": 0.6, "stability": 0.8, "social_impact": 1.0 }
@@ -80,7 +80,7 @@
     {
       "id": "goal__teach",
       "label": "Educar / ensenyar",
-      "blurb": "Mestre, professor de secundària, formador d'adults. Estable un cop a la pública. Sous modestos privada/concertada però vocació clara.",
+      "blurb": "Mestre/a d'escola, professor/a de secundària, formador/a d'adults. Feina estable un cop dins de la pública. Sous modestos a la privada i a la concertada, però vocació clara.",
       "isco1": ["2", "3"],
       "branca": ["branca__social", "branca__hum", "branca__stem"],
       "profile": { "autonomy": 0.4, "salary": 0.5, "stability": 0.8, "social_impact": 1.0 }
@@ -88,7 +88,7 @@
     {
       "id": "goal__international",
       "label": "Treballar a l'estranger",
-      "blurb": "Anglès C1+ obligatori, segon idioma desitjable. Sectors clàssics: enginyeria/IT, finances, hostaleria turística, recerca, salut (homologació necessària).",
+      "blurb": "Anglès C1 o superior imprescindible; un segon idioma és un avantatge. Sectors clàssics: enginyeria i informàtica, finances, hostaleria turística, recerca i salut (cal homologació).",
       "isco1": ["1", "2", "3", "7"],
       "branca": ["branca__stem", "branca__health", "branca__social"],
       "profile": { "autonomy": 0.7, "salary": 0.8, "stability": 0.3, "social_impact": 0.3 }
@@ -96,7 +96,7 @@
     {
       "id": "goal__art_only",
       "label": "Viure de l'art",
-      "blurb": "Esculptors, músics, escriptors a temps complet. Realitat: ≈ 12 % de qui ho intenta hi viu només. La resta combina (docència + freelance). Honest amb tu mateix abans.",
+      "blurb": "Escultors/es, músics/iques, escriptors/es a temps complet. La realitat: només un 12 % aproximadament de qui ho intenta n'arriba a viure en exclusiva. La resta ho compagina amb docència o feines per compte propi. Cal ser honest amb un mateix abans de començar.",
       "isco1": ["2", "3"],
       "branca": ["branca__hum"],
       "profile": { "autonomy": 1.0, "salary": 0.2, "stability": 0.1, "social_impact": 0.8 }
@@ -104,7 +104,7 @@
     {
       "id": "goal__startup",
       "label": "Crear una startup tech",
-      "blurb": "Enginyeria informàtica + capacitats comercials + risc. Catalunya té ecosistema (4YFN, Tech Barcelona, Lanzadera). La majoria fracassen; el 5 % triomfa.",
+      "blurb": "Enginyeria informàtica, capacitats comercials i molta tolerància al risc. Catalunya té un ecosistema fort (4YFN, Tech Barcelona, Lanzadera). La majoria de startups no surten endavant; només un 5 % aproximadament arriba a fer-se gran.",
       "isco1": ["1", "2"],
       "branca": ["branca__stem"],
       "profile": { "autonomy": 1.0, "salary": 0.7, "stability": 0.1, "social_impact": 0.5 }
@@ -112,16 +112,16 @@
     {
       "id": "goal__millionaire",
       "label": "Ser milionari/ària",
-      "blurb": "A Catalunya, amb feina honesta i fent les coses bé, és estadísticament molt poc probable abans dels 50 anys. Camins realistes: finances + dret de despatx, fundador startup + sortida, o herència. Et redirigim als camins amb sou alt — i et recordem que el mercat no està dissenyat per produir milionaris a partir d'assalariats joves.",
+      "blurb": "A Catalunya, amb feina honrada i fent les coses bé, és estadísticament molt poc probable abans dels 50 anys. Camins realistes: finances o dret de gran despatx, fundador/a de startup amb una sortida reeixida, o bé l'herència familiar. Et redirigim cap als camins amb salari alt — i et recordem que el mercat no està dissenyat per produir milionaris a partir d'assalariats joves.",
       "isco1": ["1", "2"],
       "branca": ["branca__stem", "branca__social"],
       "profile": { "autonomy": 0.5, "salary": 1.0, "stability": 0.4, "social_impact": 0.0 },
-      "honestly": "Sigues conscient: la riquesa massiva a Espanya correlaciona més amb el patrimoni familiar previ que amb la decisió formativa. Si vols arribar-hi sense herència, el camí menys improbable és emprenedoria + sort estructural — no titulació X."
+      "honestly": "Sigues conscient: a Espanya la riquesa massiva correlaciona molt més amb el patrimoni familiar previ que amb la decisió formativa. Si vols arribar-hi sense herència, el camí menys improbable és l'emprenedoria amb un cop de sort estructural — no pas la titulació X."
     },
     {
       "id": "goal__activism",
       "label": "Treballar per canviar les coses",
-      "blurb": "Tercer sector, sindicats, ONGs, política local, periodisme. Sou modest, impacte alt, desgastant. Compatible amb gairebé qualsevol formació de base — el que conta és el compromís i les xarxes.",
+      "blurb": "Tercer sector, sindicats, ONG, política local, periodisme. Sou modest, impacte alt, desgastant. Compatible amb gairebé qualsevol formació de base — el que compta és el compromís i les xarxes que teixeixes.",
       "isco1": ["2", "3"],
       "branca": ["branca__social", "branca__hum"],
       "profile": { "autonomy": 0.6, "salary": 0.3, "stability": 0.3, "social_impact": 1.0 }
