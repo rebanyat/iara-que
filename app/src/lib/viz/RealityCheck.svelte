@@ -82,7 +82,6 @@
 		color: var(--ink-secondary);
 		font-size: var(--fs-small);
 		line-height: 1.5;
-		max-width: 55ch;
 	}
 
 	.sub em {
