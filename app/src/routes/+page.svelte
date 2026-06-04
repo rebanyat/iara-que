@@ -71,7 +71,7 @@
 <style>
 	.hero {
 		padding-block: var(--sp-10) var(--sp-6);
-		max-width: 1200px;
+		max-width: 880px;
 	}
 
 	.eyebrow {
@@ -87,7 +87,6 @@
 		font-size: var(--fs-display);
 		line-height: 1.05;
 		font-weight: 900;
-		max-width: 18ch;
 	}
 
 	.display-line {
@@ -102,7 +101,7 @@
 
 	.lede {
 		margin-top: var(--sp-6);
-		max-width: 60ch;
+		max-width: 65ch;
 		font-size: 1.125rem;
 		line-height: var(--lh-loose);
 		color: var(--ink-secondary);
@@ -114,13 +113,14 @@
 	}
 
 	.viz {
-		padding-bottom: var(--sp-10);
+		max-width: 1200px;
+		padding-bottom: var(--sp-12);
 	}
 
 	.view-toggle {
 		display: flex;
 		justify-content: flex-end;
-		margin-bottom: var(--sp-3);
+		margin-block: var(--sp-3);
 	}
 
 	.view-link {
@@ -142,7 +142,7 @@
 
 	.caption {
 		margin: 0;
-		max-width: 80ch;
+		max-width: 72ch;
 		color: var(--ink-muted);
 		font-size: var(--fs-small);
 		line-height: 1.55;
