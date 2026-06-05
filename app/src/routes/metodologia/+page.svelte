@@ -67,9 +67,10 @@
     </li>
     <li>
       <strong>Wikidata</strong> — Camins educatius de figures icòniques (capa
-      <em>il·lustrativa</em>) via SPARQL pública. Avui 3 ocupacions retornen
-      dades; l'endpoint públic ha tornat 502/504 a les altres 17 i es
-      recuperaran a mesura que el servei sigui més estable.
+      <em>il·lustrativa</em>) via SPARQL pública. Avui 2 ocupacions
+      (astronauta i direcció d'empresa) retornen dades estables; l'endpoint
+      públic ha tornat 502/504 a les 40 restants i es recuperaran a mesura
+      que el servei sigui més estable.
       <a href="https://query.wikidata.org" rel="noopener">query.wikidata.org</a>
     </li>
   </ul>
@@ -103,6 +104,13 @@
       <em>wave</em> de l'enquesta i un flag <code>placeholder</code>. La vista
       en
       <a href="/?view=table">taula</a> permet auditar-les una a una.
+    </li>
+    <li>
+      <strong>Conservació de massa</strong>: les arestes que entren a cada
+      node intermedi sumen el mateix volum que les que en surten (tolerància de
+      ±0,1 % per arrodoniments a enter). Les distribucions condicionals (% que
+      titula, % que va a màster, % que entra a cada branca) s'apliquen sobre
+      el volum realment arribat al node, no sobre fonts paral·leles.
     </li>
   </ol>
 
