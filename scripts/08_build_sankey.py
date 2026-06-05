@@ -320,16 +320,32 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
         _edge("start__reorient", "titol__grau", reorient_total * 0.20, pct=0.20),
     ]
 
+    # Mass-conservation helper: total volume currently flowing into a node.
+    # Used to derive each intermediate node's outflow from its real inflow
+    # so the sankey arrows balance layer to layer.
+    def _inflow(node_id: str) -> float:
+        return sum(e["value"] for e in edges if e["target"] == node_id)
+
     # ── LAYER 1 → 3 ──────────────────────────────────────────────────────
+    # Each post__X node can receive flow from several layer-0 sources
+    # (e.g. post__fp_gs receives from batx, FP-GM and reorient). Anchor
+    # the outflow on the realised inflow so the conditional pcts apply to
+    # 100 % of the population that reached the node.
+    post_batx_in = _inflow("post__batx")
+    post_fp_gm_in = _inflow("post__fp_gm")
+    post_fp_gs_in = _inflow("post__fp_gs")
+    post_abandon_in = _inflow("post__abandon")
+    post_direct_work_in = _inflow("post__direct_work")
+
     edges += [
-        _edge("post__batx", "titol__grau", batx_total * 0.62 * 0.74, pct=0.74, src="Idescat ilgu", placeholder=False),
-        _edge("post__batx", "titol__no_higher", batx_total * 0.62 * 0.26, pct=0.26, src="Idescat ilgu", placeholder=False),
-        _edge("post__fp_gm", "titol__fp_gm", (eso_total * 0.30) * 0.78, pct=0.78, src="MEFP", placeholder=False),
-        _edge("post__fp_gm", "titol__no_higher", (eso_total * 0.30) * 0.22, pct=0.22, src="MEFP", placeholder=False),
-        _edge("post__fp_gs", "titol__fp_gs", (batx_total * 0.18) * 0.85, pct=0.85, src="MEFP", placeholder=False),
-        _edge("post__fp_gs", "titol__no_higher", (batx_total * 0.18) * 0.15, pct=0.15, src="MEFP", placeholder=False),
-        _edge("post__abandon", "titol__no_higher", eso_total * 0.14, pct=1.0, placeholder=False),
-        _edge("post__direct_work", "titol__no_higher", batx_total * 0.20 + fp_gm_total * 0.50, pct=1.0, placeholder=False),
+        _edge("post__batx", "titol__grau", post_batx_in * 0.74, pct=0.74, src="Idescat ilgu", placeholder=False),
+        _edge("post__batx", "titol__no_higher", post_batx_in * 0.26, pct=0.26, src="Idescat ilgu", placeholder=False),
+        _edge("post__fp_gm", "titol__fp_gm", post_fp_gm_in * 0.78, pct=0.78, src="MEFP", placeholder=False),
+        _edge("post__fp_gm", "titol__no_higher", post_fp_gm_in * 0.22, pct=0.22, src="MEFP", placeholder=False),
+        _edge("post__fp_gs", "titol__fp_gs", post_fp_gs_in * 0.85, pct=0.85, src="MEFP", placeholder=False),
+        _edge("post__fp_gs", "titol__no_higher", post_fp_gs_in * 0.15, pct=0.15, src="MEFP", placeholder=False),
+        _edge("post__abandon", "titol__no_higher", post_abandon_in, pct=1.0, placeholder=False),
+        _edge("post__direct_work", "titol__no_higher", post_direct_work_in, pct=1.0, placeholder=False),
     ]
 
     branca_ids = [
@@ -338,7 +354,19 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
     ]
 
     # ── LAYER 3 → 4 — Titulació distribueix per branca, amb metrics reals ──
-    grau_volume = batx_total * 0.62 * 0.74 + grau_total + reorient_total * 0.20
+    # The grau cohort splits in two: ~34 % continue to a màster, the rest
+    # enter the labour market directly. Both subsets fan out across the
+    # six branques afterwards, so the outflow from titol__grau is
+    #   to_master + to_branca = grau_inflow.
+    grau_inflow = _inflow("titol__grau")
+    master_share = 0.34
+    to_master = grau_inflow * master_share
+    to_branca = grau_inflow - to_master
+
+    edges.append(
+        _edge("titol__grau", "titol__master", to_master, pct=master_share, src="Idescat ilgu", placeholder=False)
+    )
+
     shares_grau = share_by_branca("titol__grau", metrics, branca_ids)
     for branca, share in shares_grau.items():
         m = metrics.get(("titol__grau", branca))
@@ -346,7 +374,7 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             _edge(
                 "titol__grau",
                 branca,
-                grau_volume * share,
+                to_branca * share,
                 pct=share,
                 salary=m["salary"] if m else None,
                 employed=m["employed"] if m else None,
@@ -360,11 +388,8 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             )
         )
 
-    # Màsters provenen dels graus (proporció bassa per Idescat ilgu)
-    master_volume = grau_volume * 0.34
-    edges.append(
-        _edge("titol__grau", "titol__master", master_volume, pct=0.34, src="Idescat ilgu", placeholder=False)
-    )
+    # Màsters: redistribute the realised master inflow across branques.
+    master_inflow = _inflow("titol__master")
     shares_master = share_by_branca("titol__master", metrics, branca_ids)
     # Some branques have no master entry → fall back to grau shares
     if sum(shares_master.values()) < 0.5:
@@ -375,7 +400,7 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             _edge(
                 "titol__master",
                 branca,
-                master_volume * share,
+                master_inflow * share,
                 pct=share,
                 salary=m["salary"] if m else None,
                 employed=m["employed"] if m else None,
@@ -389,7 +414,7 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             )
         )
 
-    fpgs_volume = (batx_total * 0.18) * 0.85 + fp_gs_total + reorient_total * 0.35
+    fpgs_inflow = _inflow("titol__fp_gs")
     shares_fpgs = share_by_branca("titol__fp_gs", metrics, branca_ids)
     for branca, share in shares_fpgs.items():
         m = metrics.get(("titol__fp_gs", branca))
@@ -397,7 +422,7 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             _edge(
                 "titol__fp_gs",
                 branca,
-                fpgs_volume * share,
+                fpgs_inflow * share,
                 pct=share,
                 salary=m["salary"] if m else None,
                 employed=m["employed"] if m else None,
@@ -411,7 +436,7 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             )
         )
 
-    fpgm_volume = (eso_total * 0.30) * 0.78 + reorient_total * 0.45
+    fpgm_inflow = _inflow("titol__fp_gm")
     shares_fpgm = share_by_branca("titol__fp_gm", metrics, branca_ids)
     for branca, share in shares_fpgm.items():
         m = metrics.get(("titol__fp_gm", branca))
@@ -419,7 +444,7 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
             _edge(
                 "titol__fp_gm",
                 branca,
-                fpgm_volume * share,
+                fpgm_inflow * share,
                 pct=share,
                 salary=m["salary"] if m else None,
                 employed=m["employed"] if m else None,
@@ -440,16 +465,10 @@ def build_edges(seed_totals: dict[str, float], metrics: dict[tuple[str, str], di
         "branca__hum": 0.10,
         "branca__stem": 0.05,
     }
-    no_higher_volume = (
-        eso_total * 0.14
-        + (eso_total * 0.30) * 0.22
-        + (batx_total * 0.18) * 0.15
-        + batx_total * 0.62 * 0.26
-        + batx_total * 0.20 + fp_gm_total * 0.50
-    )
+    no_higher_inflow = _inflow("titol__no_higher")
     for target, share in no_higher_branca.items():
         edges.append(
-            _edge("titol__no_higher", target, no_higher_volume * share, pct=share, src="SEPE")
+            _edge("titol__no_higher", target, no_higher_inflow * share, pct=share, src="SEPE")
         )
 
     # ── LAYER 4 → 6 — Branca → ISCO-1 ──────────────────────────────────
